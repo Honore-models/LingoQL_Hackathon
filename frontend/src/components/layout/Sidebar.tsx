@@ -4,6 +4,7 @@ import {
   Home,
   LayoutDashboard,
   Briefcase,
+  MessageSquareText,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -21,6 +22,7 @@ const overview = [
 
 const pipeline = [
   { label: "New Job", href: ROUTES.newJob, icon: Briefcase, prefixMatch: "/dashboard/jobs" },
+  { label: "Query Talent", href: ROUTES.queryTalent, icon: MessageSquareText },
 ] as const;
 
 const system = [{ label: "Settings", href: "/dashboard/settings", icon: Settings }] as const;
@@ -91,7 +93,7 @@ export function Sidebar({ pathname }: { pathname: string }) {
       await logoutUser();
       toast.success("Signed out successfully");
     } catch (error) {
-      toast.error("Unable to fully clear the session, but youâ€™ve been redirected.");
+      toast.error("Unable to fully clear the session, but you've been redirected.");
     } finally {
       router.push(ROUTES.login);
     }
@@ -124,7 +126,7 @@ export function Sidebar({ pathname }: { pathname: string }) {
       <div className="border-t border-white/10 p-4 space-y-3">
         <div className="flex items-center gap-3 rounded-input bg-black/20 px-3 py-2.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-white">
-            {currentUser?.name?.slice(0, 2).toUpperCase() || "RW"}
+            {currentUser?.name?.slice(0, 2).toUpperCase() || "TV"}
           </div>
           <div className="min-w-0 flex-1">
             <div className="truncate text-sm font-semibold text-white">

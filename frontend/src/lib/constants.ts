@@ -5,6 +5,7 @@ export const ROUTES = {
   forgotPassword: '/forgot-password',
   register: '/register',
   newJob: '/dashboard/jobs/new',
+  queryTalent: '/dashboard/query',
   contact: '/contact',
   about: '/about',
 } as const;

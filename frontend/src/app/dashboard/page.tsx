@@ -377,7 +377,7 @@ export default function DashboardPage() {
                               className="font-semibold text-accent hover:text-accent-hover"
                               href={`/dashboard/jobs/${job.id}`}
                             >
-                              View â†’
+                              View &rarr;
                             </Link>
                             <button
                               className="rounded-input p-2 text-text-muted hover:bg-bg hover:text-text-primary dark:hover:bg-slate-700"

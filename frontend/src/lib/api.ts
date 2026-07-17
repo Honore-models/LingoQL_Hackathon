@@ -597,6 +597,19 @@ export async function getCurrentUser(): Promise<AuthUser> {
 }
 
 export async function loginUser(payload: LoginPayload): Promise<LoginResponse> {
+  if (isMockMode()) {
+    await sleep(350);
+    return {
+      success: 'Login successful',
+      user: {
+        id: 'demo-user',
+        name: 'A. Recruiter',
+        email: payload.user_email,
+        isVerified: true,
+      },
+    };
+  }
+
   const response = await api.post<LoginResponse>('/auth/login', payload);
   return response.data;
 }
@@ -604,11 +617,39 @@ export async function loginUser(payload: LoginPayload): Promise<LoginResponse> {
 export async function signupUser(
   payload: SignupPayload
 ): Promise<SignupResponse> {
+  if (isMockMode()) {
+    await sleep(450);
+    return {
+      success: 'Signup successful',
+      verificationRequired: true,
+      devOtpToken: '123456',
+      user: {
+        id: 'demo-user',
+        name: payload.user_name,
+        email: payload.user_email,
+        isVerified: false,
+      },
+    };
+  }
+
   const response = await api.post<SignupResponse>('/auth/signup', payload);
   return response.data;
 }
 
 export async function confirmSignup(token: string): Promise<ConfirmResponse> {
+  if (isMockMode()) {
+    await sleep(350);
+    return {
+      success: 'Account verified successfully',
+      user: {
+        id: 'demo-user',
+        name: 'A. Recruiter',
+        email: 'recruiter@talvo.dev',
+        isVerified: true,
+      },
+    };
+  }
+
   const response = await api.post<ConfirmResponse>('/auth/confirm', { token });
   return response.data;
 }
@@ -672,6 +713,44 @@ export async function logoutUser(): Promise<LogoutResponse> {
 export async function createJob(
   payload: CompleteJobPayload
 ): Promise<CompleteJobResponse> {
+  if (isMockMode()) {
+    await sleep(500);
+    const createdAtISO = new Date().toISOString();
+    return {
+      success: 'Job created successfully',
+      job: {
+        id: `mock-job-${Date.now()}`,
+        title: payload.reqBody.job_title,
+        department: payload.reqBody.job_department,
+        location: payload.reqBody.job_location,
+        employmentType: payload.reqBody.job_employment_type,
+        experienceLevel: payload.reqBody.job_experience_required,
+        salaryMin: payload.reqBody.job_salary_min,
+        salaryMax: payload.reqBody.job_salary_max,
+        description: payload.reqBody.job_description,
+        responsibilities: payload.reqBody.job_responsibilities,
+        qualifications: payload.reqBody.job_qualifications,
+        aiCriteria: {
+          mustHaveSkills: payload.reqBody.job_ai_criteria
+            .filter((item) => item.priority.toLowerCase().includes('must'))
+            .map((item) => item.criteria_string)
+            .join(', '),
+          niceToHaveSkills: payload.reqBody.job_ai_criteria
+            .filter((item) => !item.priority.toLowerCase().includes('must'))
+            .map((item) => item.criteria_string)
+            .join(', '),
+          screeningQuestions: payload.reqBody.job_description,
+          dealBreakers: '',
+          shortlistSize: payload.reqBody.job_shortlist_size,
+        },
+        status: 'Active',
+        applicantsCount: 0,
+        shortlistedCount: 0,
+        updatedAtISO: createdAtISO,
+      },
+    };
+  }
+
   const response = await api.post<CompleteJobResponse>(
     '/complete-job',
     {

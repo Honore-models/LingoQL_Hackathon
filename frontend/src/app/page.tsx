@@ -241,7 +241,7 @@ export default function LandingPage() {
                     </Button>
                   </Link>
                   <Link href={ROUTES.dashboard} className="w-full text-center text-sm font-semibold text-white/90 underline-offset-4 hover:underline sm:w-auto">
-                    Skip to app demo ->
+                    Skip to app demo &rarr;
                   </Link>
                 </div>
               </div>

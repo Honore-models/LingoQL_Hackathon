@@ -1,5 +1,5 @@
 // Service Worker for caching static assets
-const CACHE_NAME = 'wiserank-v1';
+const CACHE_NAME = 'talvo-v1';
 const urlsToCache = [
   '/',
   '/dashboard',

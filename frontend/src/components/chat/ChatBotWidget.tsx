@@ -36,7 +36,7 @@ function cannedAnswer(input: string) {
   if (q.includes("candidate") || q.includes("profile")) {
     return "Open any candidate to see AI score breakdown, strengths, and gaps. You can Shortlist, Reject, or Save for later from the header actions.";
   }
-  return "I can help draft job criteria, explain AI scores, and suggest next actions. Ask me something like: Why is Aline a top candidate? or Draft screening questions for a Senior Full Stack Engineer.
+  return "I can help draft job criteria, explain AI scores, and suggest next actions. Ask me something like: Why is Honore a top candidate? or Draft screening questions for a Senior Full Stack Engineer.";
 }
 
 export function ChatBotWidget() {
