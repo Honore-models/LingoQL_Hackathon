@@ -252,7 +252,7 @@ export default function LandingPage() {
 
       <footer className="border-t border-border py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-text-muted sm:flex-row sm:px-6">
-          <p>Ãƒâ€šÃ‚Â© {new Date().getFullYear()} Talvo Ãƒâ€šÃ‚Â· LingoQL Hackathon</p>
+          <p>© {new Date().getFullYear()} Talvo - LingoQL Hackathon</p>
           <div className="flex gap-6">
             <Link href="/about" className="hover:text-text-primary transition-colors">
               About

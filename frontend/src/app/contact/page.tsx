@@ -386,7 +386,7 @@ export default function ContactPage() {
 
       <footer className="border-t border-border py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-text-muted sm:flex-row sm:px-6">
-          <p>Â© {new Date().getFullYear()} Talvo Â· Demo frontend</p>
+          <p>© {new Date().getFullYear()} Talvo - LingoQL Hackathon</p>
           <div className="flex gap-6">
             <Link href="/" className="hover:text-text-primary transition-colors">
               Home
