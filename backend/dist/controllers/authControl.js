@@ -186,7 +186,7 @@ export const signUp = async (req, res) => {
                 </div>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href=${confirmation_link} target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href=${confirmation_link} target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32, #ea6c00); background: linear-gradient(#ff8c32, #ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open confirmation screen
                   </a>
                 </div>
@@ -443,7 +443,7 @@ export const confirm = async (req, res) => {
                 </p>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32, #ea6c00); background: linear-gradient(#ff8c32, #ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open dashboard
                   </a>
                 </div>
@@ -706,7 +706,7 @@ export const confirm_get = async (req, res) => {
                 </p>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32, #ea6c00); background: linear-gradient(#ff8c32, #ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open dashboard
                   </a>
                 </div>

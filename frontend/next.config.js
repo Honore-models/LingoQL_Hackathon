@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
+const path = require("path");
+
 const nextConfig = {
   compress: true,
+  turbopack: {
+    root: path.join(__dirname),
+  },
   images: {
     remotePatterns: [],
   },

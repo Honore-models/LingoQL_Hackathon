@@ -9,19 +9,19 @@ const CSS_PATH = path.join(ROOT, "email.css");
 const TEMPLATE_MAP = {
   "welcome-workspace": {
     fileName: "welcome-workspace.html",
-    subject: "Welcome to WiseRank",
+    subject: "Welcome to Talvo",
   },
   "account-verification": {
     fileName: "account-verification.html",
-    subject: "Confirm your WiseRank account",
+    subject: "Confirm your Talvo account",
   },
   "password-reset": {
     fileName: "password-reset.html",
-    subject: "Reset your WiseRank password",
+    subject: "Reset your Talvo password",
   },
   "shortlist-ready": {
     fileName: "shortlist-ready.html",
-    subject: "Your WiseRank shortlist is ready",
+    subject: "Your Talvo shortlist is ready",
   },
 };
 
@@ -324,7 +324,7 @@ function renderBrandLockup() {
       <!--<![endif]-->
     </td>
     <td class="wr-brand-copy-cell" valign="middle">
-      <div class="wr-brand-title">WiseRank</div>
+      <div class="wr-brand-title">Talvo</div>
       <div class="wr-brand-subtitle">Recruiter Workspace</div>
     </td>
   </tr>
@@ -371,15 +371,15 @@ function getBaseContext() {
   return {
     brandLockupHtml: renderBrandLockup(),
     companyAddress: "Kigali, Rwanda",
-    contactUrl: "https://app.rankwise.dev/contact",
+    contactUrl: "https://app.talvo.dev/contact",
     currentYear: new Date().getFullYear(),
-    dashboardUrl: "https://app.rankwise.dev/dashboard",
-    jobsUrl: "https://app.rankwise.dev/dashboard/jobs/new",
-    loginUrl: "https://app.rankwise.dev/login",
-    productName: "WiseRank",
-    registerUrl: "https://app.rankwise.dev/register",
-    supportEmail: "hello@rankwise.io",
-    supportUrl: "mailto:hello@rankwise.io",
+    dashboardUrl: "https://app.talvo.dev/dashboard",
+    jobsUrl: "https://app.talvo.dev/dashboard/jobs/new",
+    loginUrl: "https://app.talvo.dev/login",
+    productName: "Talvo",
+    registerUrl: "https://app.talvo.dev/register",
+    supportEmail: "hello@talvo.io",
+    supportUrl: "mailto:hello@talvo.io",
   };
 }
 
@@ -391,9 +391,9 @@ function buildTemplateContext(templateName, overrides = {}) {
       {
         ...base,
         preheader:
-          "Your WiseRank workspace is ready. Start creating roles and screening candidates with explainable AI.",
+          "Your Talvo workspace is ready. Start creating roles and screening candidates with explainable AI.",
         userName: "Alex",
-        workspaceName: "WiseRank Recruiter Workspace",
+        workspaceName: "Talvo Recruiter Workspace",
       },
       overrides
     );
@@ -405,11 +405,11 @@ function buildTemplateContext(templateName, overrides = {}) {
         ...base,
         expiresIn: "10 minutes",
         preheader:
-          "Use this code to confirm your WiseRank account and finish setting up your recruiter workspace.",
+          "Use this code to confirm your Talvo account and finish setting up your recruiter workspace.",
         recipientEmail: "alex@company.com",
         userName: "Alex",
         verificationCode: "438291",
-        verifyUrl: "https://app.rankwise.dev/register",
+        verifyUrl: "https://app.talvo.dev/register",
       },
       overrides
     );
@@ -421,10 +421,10 @@ function buildTemplateContext(templateName, overrides = {}) {
         ...base,
         expiresIn: "30 minutes",
         preheader:
-          "A password reset was requested for your WiseRank account. Verify the request and choose a new password.",
+          "A password reset was requested for your Talvo account. Verify the request and choose a new password.",
         recipientEmail: "alex@company.com",
         resetCode: "804117",
-        resetUrl: "https://app.rankwise.dev/forgot-password",
+        resetUrl: "https://app.talvo.dev/forgot-password",
         userName: "Alex",
       },
       overrides
@@ -451,13 +451,13 @@ function buildTemplateContext(templateName, overrides = {}) {
               "Excellent component architecture, clear accessibility habits, and direct experience shipping recruiter-facing UX.",
           },
         ]),
-        exportUrl: "https://app.rankwise.dev/dashboard/screening/job_001/results",
+        exportUrl: "https://app.talvo.dev/dashboard/screening/job_001/results",
         jobTitle: "Senior Frontend Engineer",
         maybeCount: "4",
         preheader:
-          "Your screening run is complete. Review the latest WiseRank shortlist and share the strongest candidates.",
+          "Your screening run is complete. Review the latest Talvo shortlist and share the strongest candidates.",
         qualifiedCount: "6",
-        reviewUrl: "https://app.rankwise.dev/dashboard/screening/job_001/results",
+        reviewUrl: "https://app.talvo.dev/dashboard/screening/job_001/results",
         screenedCount: "24",
         userName: "Alex",
         verdict:

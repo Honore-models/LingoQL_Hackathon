@@ -4,7 +4,7 @@
   "private": true,
   "description": "Talvo - Sub0-powered talent intelligence and AI screening for recruiters.",
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "install:all": "npm install --prefix backend && npm ci --prefix frontend --ignore-scripts",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",
     "build:backend": "npm run build --prefix backend",
     "build:frontend": "npm run build --prefix frontend",

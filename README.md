@@ -100,30 +100,46 @@ See [SUB0_PLAN.md](./SUB0_PLAN.md) and [sub0/README.md](./sub0/README.md) for fu
 | `USER_EMAIL`, `USER_PASS` | SMTP for real emails (without these, signup returns `devOtpToken`) |
 | Sub0 / LingoQL credentials | Production deployment |
 
+## Deployment
+
+### Docker (local / demo server)
+
+```bash
+copy backend\.env.example backend\.env
+# Edit backend\.env with MONGO_URI, secrets, and optional GOOGLE_API_KEY
+
+docker compose up --build
+```
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- API docs: http://localhost:5000/docs
+
+### LingoQL + Sub0 (production)
+
+1. **Sub0** — Create models from `sub0/models/` and APIs from `sub0/apis/`
+2. **Express worker** — Deploy `backend/` with `GOOGLE_API_KEY`; wire Sub0 webhooks for `/ai/run` and `/ai/ask`
+3. **LingoQL** — Deploy `frontend/` with `NEXT_PUBLIC_API_URL` pointing to your Sub0 API base URL
+4. **Judging fallback** — Deploy frontend without `NEXT_PUBLIC_API_URL` to enable mock mode
+
 ## Local Setup
 
 ```bash
-# Install dependencies
-cd backend && npm install
-cd ../frontend && npm ci
-
-# Configure environment
+npm run install:all
 copy backend\.env.example backend\.env
 copy frontend\.env.example frontend\.env
-
-# Build
-cd ../backend && npm run build
-cd ../frontend && npm run build
+npm run build
 ```
 
 **Mock mode:** Leave `NEXT_PUBLIC_API_URL` unset in `frontend/.env` — the app runs with local mock data (reliable for judging).
 
-**Live API mode:** Set `NEXT_PUBLIC_API_URL=http://localhost:3001` (or your Express worker URL).
+**Live API mode:** Set `NEXT_PUBLIC_API_URL=http://localhost:5000` (Express worker URL).
 
-### Docker
+Run services separately:
 
 ```bash
-docker compose up --build
+npm run dev:backend
+npm run dev:frontend
 ```
 
 ## Demo Flow (for judges)

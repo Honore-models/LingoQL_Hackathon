@@ -1,6 +1,6 @@
-# WiseRank Email Templates
+# Talvo Email Templates
 
-This folder contains reusable source templates for WiseRank user emails.
+This folder contains reusable source templates for Talvo user emails.
 
 What is included:
 
