@@ -91,7 +91,7 @@ export function Sidebar({ pathname }: { pathname: string }) {
       await logoutUser();
       toast.success("Signed out successfully");
     } catch (error) {
-      toast.error("Unable to fully clear the session, but you’ve been redirected.");
+      toast.error("Unable to fully clear the session, but youâ€™ve been redirected.");
     } finally {
       router.push(ROUTES.login);
     }
@@ -128,7 +128,7 @@ export function Sidebar({ pathname }: { pathname: string }) {
           </div>
           <div className="min-w-0 flex-1">
             <div className="truncate text-sm font-semibold text-white">
-              {currentUser?.name || "WiseRank Workspace"}
+              {currentUser?.name || "Talvo Workspace"}
             </div>
             <div className="truncate text-xs text-white/50">
               {currentUser?.email || "Connected recruitment workspace"}

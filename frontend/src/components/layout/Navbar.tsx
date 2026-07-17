@@ -86,7 +86,7 @@ export function Navbar() {
             aria-expanded={showDropdown}
             aria-haspopup="menu"
           >
-            {initials(currentUser?.name || "WiseRank")}
+            {initials(currentUser?.name || "Talvo")}
           </button>
           {showDropdown ? (
             <div

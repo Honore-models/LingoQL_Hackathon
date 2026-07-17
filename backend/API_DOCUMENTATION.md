@@ -1,40 +1,45 @@
-# RankWise API Documentation
+# Talvo API Documentation
 
-This document outlines the available REST API endpoints for the RankWise backend.
+Talvo exposes the recruiter workspace API plus Gemini-powered screening routes.
 
-## 1. Authentication Routes
-**Base Path:** `/auth`
+## Authentication
 
-These endpoints manage user registration, authentication, and password resets.
+Base path: `/auth`
 
-*   **`POST /auth/signup`**: Register a new user account.
-*   **`POST /auth/login`**: Authenticate a user and receive a token/session.
-*   **`POST /auth/confirm`**: Confirm a user account via a provided code or token.
-*   **`GET /auth/confirm_link/:confirmation_link_id`**: Confirm a user account via a direct link.
-*   **`POST /auth/forgot`**: Initiate the forgotten password flow by requesting a verification code.
-*   **`POST /auth/verify`**: Verify the password reset code.
-*   **`POST /auth/reset`**: Reset the password after successful verification.
+- `POST /auth/signup` - create a recruiter account. If SMTP is not configured, the response includes `devOtpToken` for local demos.
+- `POST /auth/confirm` - verify signup OTP and issue the `access_token` cookie.
+- `POST /auth/login` - sign in and issue the `access_token` cookie.
+- `GET /auth/me` - return the current authenticated user.
+- `POST /auth/forgot` - request password reset.
+- `POST /auth/verify` - verify reset OTP.
+- `POST /auth/reset` - set a new password.
+- `GET /auth/confirm_link/:confirmation_link_id` - verify via email link.
 
-## 2. Dashboard & Core Operations
-**Base Path:** `/`
+## Recruiter Workspace
 
-These endpoints require authentication (`middleAuth` middleware) and handle the core functionalities of the RankWise system, including candidate registration and shortlisting.
+Protected by `middleAuth`.
 
-*   **`GET /dashboard`**: Retrieve the user's dashboard data (e.g., jobs, recent activity).
-*   **`POST /register-candidate`**: Upload and register candidates. 
-    *   *Accepts multipart/form-data:* Expects `applicants_spreadsheet` (.xlsx or .csv) and/or `resume_pdf_zip` (.zip containing PDFs).
-*   **`POST /ask`**: Ask Gemini questions based on the candidate data.
-*   **`POST /complete-job`**: Mark a specific job posting or screening task as completed.
-*   **`POST /review-result`**: Review and update the verdict (e.g., shortlist status) of screened applicants.
-*   **`POST /sendEmails`**: Trigger emails to shortlisted or rejected candidates.
+- `GET /dashboard` - normalized dashboard payload for the frontend.
+- `GET /jobs` - list jobs.
+- `GET /jobs/:id` - get one job.
+- `POST /complete-job` - create a job.
+- `GET /candidates` - list candidates.
+- `GET /candidates/:id` - get one candidate.
+- `POST /register-candidate` - register candidates from JSON or multipart form data.
+- `POST /shortlist` - update applicant states and trigger emails.
+- `POST /sendEmails` - send shortlist/rejection emails.
 
-## 3. AI Screening Services
-**Base Path:** `/ai`
+Multipart fields for `POST /register-candidate`:
 
-These endpoints integrate with Google's Generative AI (Gemini/Vertex AI) to analyze and rank candidates.
+- `applicants_spreadsheet`: CSV or XLSX.
+- `resume_pdf_zip`: optional ZIP of PDFs.
 
-*   **`GET /ai/models`**: List the available Generative AI models.
-*   **`POST /ai/run`**: Initiate a new AI screening run for a specific job and set of applicants.
-*   **`GET /ai/runs`**: Retrieve a list of past and ongoing AI screening runs.
-*   **`GET /ai/runs/:runId`**: Retrieve the detailed results of a specific AI screening run, including candidate rankings and match scores.
-*   **`POST /ai/ask`**: Ask the AI assistant questions about specific candidates or job requirements.
+## AI Screening
+
+Base path: `/ai`
+
+- `GET /ai/models` - list Gemini models.
+- `POST /ai/run` - create a screening run for a job.
+- `GET /ai/runs` - list screening runs.
+- `GET /ai/runs/:runId` - get screening run results.
+- `POST /ai/ask` - ask a recruiter question against job/applicant context.

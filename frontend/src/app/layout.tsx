@@ -5,8 +5,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
-  title: "WiseRank",
-  description: "AI-powered candidate screening tool for recruiters",
+  title: "Talvo",
+  description: "Sub0-powered talent intelligence and AI screening for recruiters",
 };
 
 export default function RootLayout({

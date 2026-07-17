@@ -26,7 +26,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-semibold text-text-primary mb-3">Workspace Name</label>
                 <input 
                   type="text" 
-                  defaultValue="RankWise" 
+                  defaultValue="Talvo" 
                   className="w-full rounded-input border border-border bg-bg px-4 py-3 text-text-primary focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
                 />
               </div>
@@ -156,7 +156,7 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-2">
                   <input 
                     type="password" 
-                    value="••••••••••••••••" 
+                    value="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
                     readOnly
                     className="flex-1 rounded-input border border-border bg-bg px-4 py-2.5 text-sm text-text-primary"
                   />

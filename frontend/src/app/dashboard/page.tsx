@@ -194,7 +194,7 @@ export default function DashboardPage() {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
         <PageHeader
           title="Dashboard"
-          subtitle="Welcome back — here’s what needs attention in your hiring workflow."
+          subtitle="Welcome back â€” hereâ€™s what needs attention in your hiring workflow."
         />
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -226,7 +226,7 @@ export default function DashboardPage() {
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
       <PageHeader
         title="Dashboard"
-        subtitle="Welcome back — here’s what needs attention in your hiring workflow."
+        subtitle="Welcome back â€” hereâ€™s what needs attention in your hiring workflow."
       />
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -377,7 +377,7 @@ export default function DashboardPage() {
                               className="font-semibold text-accent hover:text-accent-hover"
                               href={`/dashboard/jobs/${job.id}`}
                             >
-                              View →
+                              View â†’
                             </Link>
                             <button
                               className="rounded-input p-2 text-text-muted hover:bg-bg hover:text-text-primary dark:hover:bg-slate-700"

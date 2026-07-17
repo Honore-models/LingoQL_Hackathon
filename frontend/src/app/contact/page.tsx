@@ -139,7 +139,7 @@ export default function ContactPage() {
               <span className="flex h-9 w-9 items-center justify-center rounded-input bg-accent text-white shadow-sm">
                 <Zap className="h-5 w-5" />
               </span>
-              <span className="hidden sm:inline">RankWise</span>
+              <span className="hidden sm:inline">Talvo</span>
             </Link>
           </div>
           <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="mt-6 text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">
-              Have a question or want to learn more about RankWise? We'd love to hear from you. Our team is ready to help.
+              Have a question or want to learn more about Talvo? We'd love to hear from you. Our team is ready to help.
             </p>
           </div>
         </section>
@@ -186,8 +186,8 @@ export default function ContactPage() {
                     {
                       icon: Mail,
                       title: "Email",
-                      value: "hello@rankwise.io",
-                      href: "mailto:hello@rankwise.io",
+                      value: "hello@talvo.app",
+                      href: "mailto:hello@talvo.app",
                       description: "Send us an email at any time",
                     },
                     {
@@ -348,7 +348,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
             <h2 className="text-2xl font-bold text-text-primary mb-4">Prefer to see a demo first?</h2>
             <p className="text-text-muted mb-8 max-w-2xl mx-auto leading-relaxed">
-              Create a free account and explore RankWise directly. Get started in just a few minutes.
+              Create a free account and explore Talvo directly. Get started in just a few minutes.
             </p>
             <Link href={ROUTES.register}>
               <Button size="lg">Get Started Now</Button>
@@ -370,7 +370,7 @@ export default function ContactPage() {
               <Link href="/">
                 <div className="rounded-card border border-border bg-card p-6 text-center hover:border-accent/30 transition-colors cursor-pointer">
                   <h3 className="font-semibold text-text-primary mb-2">See Features</h3>
-                  <p className="text-sm text-text-muted">Explore what RankWise can do</p>
+                  <p className="text-sm text-text-muted">Explore what Talvo can do</p>
                 </div>
               </Link>
               <Link href={ROUTES.login}>
@@ -386,7 +386,7 @@ export default function ContactPage() {
 
       <footer className="border-t border-border py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-text-muted sm:flex-row sm:px-6">
-          <p>© {new Date().getFullYear()} RankWise · Demo frontend</p>
+          <p>Â© {new Date().getFullYear()} Talvo Â· Demo frontend</p>
           <div className="flex gap-6">
             <Link href="/" className="hover:text-text-primary transition-colors">
               Home

@@ -1,7 +1,7 @@
 {
-  "name": "rank_wise_backend",
+  "name": "talvo-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Talvo backend API and AI screening worker.",
   "main": "./dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

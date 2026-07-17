@@ -49,6 +49,25 @@ export const signUp = async (req, res) => {
         newUser.confirmation_link_id = randomId;
         const confirmation_link = "http://localhost:3000/confirm-link/" + randomId;
         await newUser.save();
+        let rec_info = { user_id: newUser._id };
+        if (!env.ACCESS_SECRET)
+            return res.status(500).json({ server_error: "Internal server error" });
+        const signup_reference_token = jwt.sign(rec_info, env.ACCESS_SECRET, {
+            expiresIn: "10m",
+            algorithm: "HS256",
+        });
+        res.cookie("signup_reference_token", signup_reference_token, {
+            maxAge: 10 * 60 * 1000,
+            httpOnly: true,
+            sameSite: true,
+        });
+        if (!env.USER_EMAIL || !env.USER_PASS) {
+            return res.status(201).json({
+                success: "Sign up successful",
+                verificationRequired: true,
+                devOtpToken: otpToken,
+            });
+        }
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
@@ -61,7 +80,7 @@ export const signUp = async (req, res) => {
         transporter.sendMail({
             from: env.USER_EMAIL,
             to: newUser.user_email,
-            subject: "WiseRank Sign up Verification",
+            subject: "Talvo Sign up Verification",
             text: `This is your token ${otpToken}`,
             html: `<!doctype html>
 <html lang="en" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc;">
@@ -69,7 +88,7 @@ export const signUp = async (req, res) => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>Confirm your WiseRank account</title>
+    <title>Confirm your Talvo account</title>
     
   <style>
 @media only screen and (max-width: 640px) {
@@ -128,7 +147,7 @@ export const signUp = async (req, res) => {
 </style>
   </head>
   <body class="wr-body" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc; font-family: Segoe UI, Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; background: radial-gradient(circle at top, rgba(255, 140, 50, 0.12), transparent 34%), #f8fafc; color: #0f172a;">
-    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Use this code to confirm your WiseRank account and finish setting up your recruiter workspace.</div>
+    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Use this code to confirm your Talvo account and finish setting up your recruiter workspace.</div>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="wr-layout" bgcolor="#f8fafc" style="font-family: Segoe UI, Arial, sans-serif; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%; background-color: #f8fafc;">
       <tr>
@@ -145,14 +164,14 @@ export const signUp = async (req, res) => {
       <img src="https://res.cloudinary.com/da7sdnt5z/image/upload/v1777007048/icon_cifdka.png" width="46" height="46" />
     </td>
     <td class="wr-brand-copy-cell" valign="middle" style="font-family: Segoe UI, Arial, sans-serif; padding-left: 12px; vertical-align: middle;">
-      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">WiseRank</div>
+      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">Talvo</div>
       <div class="wr-brand-subtitle" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 3px; font-size: 12px; color: rgba(248, 250, 252, 0.72);">Recruiter Workspace</div>
     </td>
   </tr>
 </table>
 
                 <div class="wr-kicker" style="font-family: Segoe UI, Arial, sans-serif; display: inline-block; margin-bottom: 14px; padding: 7px 12px; border: 1px solid rgba(255, 200, 130, 0.25); border-radius: 999px; background-color: rgba(255, 140, 50, 0.18); background: rgba(255, 140, 50, 0.18); color: #ffd4a0; font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">Account Verification</div>
-                <h1 class="wr-title" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 30px; line-height: 1.14; letter-spacing: -0.04em; color: #f8fafc;">Confirm your email and unlock WiseRank</h1>
+                <h1 class="wr-title" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 30px; line-height: 1.14; letter-spacing: -0.04em; color: #f8fafc;">Confirm your email and unlock Talvo</h1>
                 <p class="wr-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.65; color: rgba(241, 245, 249, 0.84);">
                   Hi ${newUser.user_name}, use this 6-digit code to activate the recruiter workspace linked
                   to ${newUser.user_email}
@@ -167,7 +186,7 @@ export const signUp = async (req, res) => {
                 </div>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href=${confirmation_link} target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32→#ea6c00); background: linear-gradient(#ff8c32→#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href=${confirmation_link} target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open confirmation screen
                   </a>
                 </div>
@@ -213,7 +232,7 @@ export const signUp = async (req, res) => {
                 <div class="wr-surface wr-surface-muted" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); background-color: #f3fbf7; background: linear-gradient(180deg, rgba(255, 140, 50, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%); border-color: rgba(255, 140, 50, 0.22);">
                   <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">Why you received this</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
-                    A WiseRank account was created using ${newUser.user_email}. If that was not you,
+                    A Talvo account was created using ${newUser.user_email}. If that was not you,
                     you can ignore this email and the workspace will stay unverified.
                   </p>
                 </div>
@@ -225,7 +244,7 @@ export const signUp = async (req, res) => {
                 <div class="wr-surface" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
                   <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">Need a hand?</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
-                    Reach out at <a class="wr-link" href="mailto:hello@rankwise.io" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@rankwise.io</a> if
+                    Reach out at <a class="wr-link" href="mailto:hello@talvo.app" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@talvo.app</a> if
                     you need help completing verification or securing your account.
                   </p>
                 </div>
@@ -234,11 +253,11 @@ export const signUp = async (req, res) => {
 
                 <div class="wr-footer" style="font-family: Segoe UI, Arial, sans-serif; padding: 18px 10px 0; text-align: center;">
                   <p class="wr-footer-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b;">
-                    Security note: verification codes should only be used on WiseRank screens you
+                    Security note: verification codes should only be used on Talvo screens you
                     opened intentionally.
                   </p>
                   <p class="wr-footer-links" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b; margin-top: 8px;">
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
               </td>
@@ -252,19 +271,10 @@ export const signUp = async (req, res) => {
 </html>
 `,
         });
-        let rec_info = { user_id: newUser._id };
-        if (!env.ACCESS_SECRET)
-            return res.status(500).json({ server_error: "Internal server error" });
-        const signup_reference_token = jwt.sign(rec_info, env.ACCESS_SECRET, {
-            expiresIn: "10m",
-            algorithm: "HS256",
+        res.status(201).json({
+            success: "Sign up successful",
+            verificationRequired: true,
         });
-        res.cookie("signup_reference_token", signup_reference_token, {
-            maxAge: 10 * 60 * 1000,
-            httpOnly: true,
-            sameSite: true,
-        });
-        res.status(201).json({ success: "Sign up successful" });
     }
     catch (error) {
         controlDebug("Error sign up controller");
@@ -335,15 +345,15 @@ export const confirm = async (req, res) => {
             transporter.sendMail({
                 from: env.USER_EMAIL,
                 to: user.user_email,
-                subject: "Onboarding, WiseRank",
-                text: `Welcome to WiseRank`,
+                subject: "Onboarding, Talvo",
+                text: `Welcome to Talvo`,
                 html: `<!doctype html>
 <html lang="en" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc;">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>Welcome to WiseRank</title>
+    <title>Welcome to Talvo</title>
     
   <style>
 @media only screen and (max-width: 640px) {
@@ -402,7 +412,7 @@ export const confirm = async (req, res) => {
 </style>
   </head>
   <body class="wr-body" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc; font-family: Segoe UI, Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; background: radial-gradient(circle at top, rgba(255, 140, 50, 0.12), transparent 34%), #f8fafc; color: #0f172a;">
-    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Your WiseRank workspace is ready. Start creating roles and screening candidates with explainable AI.</div>
+    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Your Talvo workspace is ready. Start creating roles and screening candidates with explainable AI.</div>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="wr-layout" bgcolor="#f8fafc" style="font-family: Segoe UI, Arial, sans-serif; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%; background-color: #f8fafc;">
       <tr>
@@ -419,7 +429,7 @@ export const confirm = async (req, res) => {
       <img src="https://res.cloudinary.com/da7sdnt5z/image/upload/v1777007048/icon_cifdka.png" width="46" height="46" />
     </td>
     <td class="wr-brand-copy-cell" valign="middle" style="font-family: Segoe UI, Arial, sans-serif; padding-left: 12px; vertical-align: middle;">
-      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">WiseRank</div>
+      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">Talvo</div>
       <div class="wr-brand-subtitle" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 3px; font-size: 12px; color: rgba(248, 250, 252, 0.72);">Recruiter Workspace</div>
     </td>
   </tr>
@@ -428,12 +438,12 @@ export const confirm = async (req, res) => {
                 <div class="wr-kicker" style="font-family: Segoe UI, Arial, sans-serif; display: inline-block; margin-bottom: 14px; padding: 7px 12px; border: 1px solid rgba(255, 200, 130, 0.25); border-radius: 999px; background-color: rgba(255, 140, 50, 0.18); background: rgba(255, 140, 50, 0.18); color: #ffd4a0; font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">Workspace Ready</div>
                 <h1 class="wr-title" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 30px; line-height: 1.14; letter-spacing: -0.04em; color: #f8fafc;">Welcome aboard, ${user_first_name}</h1>
                 <p class="wr-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.65; color: rgba(241, 245, 249, 0.84);">
-                  WiseRank Recruiter Workspace is ready. You can now post roles, review applicants, and move
+                  Talvo Recruiter Workspace is ready. You can now post roles, review applicants, and move
                   faster with explainable AI-assisted shortlists.
                 </p>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href="https://app.rankwise.dev/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32→#ea6c00); background: linear-gradient(#ff8c32→#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open dashboard
                   </a>
                 </div>
@@ -493,9 +503,9 @@ export const confirm = async (req, res) => {
                 <div class="wr-surface wr-surface-muted" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); background-color: #f3fbf7; background: linear-gradient(180deg, rgba(255, 140, 50, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%); border-color: rgba(255, 140, 50, 0.22);">
                   <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">Helpful shortcuts</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
-                    Jump straight to your <a class="wr-link" href="https://app.rankwise.dev/dashboard" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">dashboard</a>,
-                    create a <a class="wr-link" href="https://app.rankwise.dev/dashboard/jobs/new" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">new role</a>, or reach the team at
-                    <a class="wr-link" href="mailto:hello@rankwise.io" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@rankwise.io</a>.
+                    Jump straight to your <a class="wr-link" href="https://app.talvo.app/dashboard" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">dashboard</a>,
+                    create a <a class="wr-link" href="https://app.talvo.app/dashboard/jobs/new" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">new role</a>, or reach the team at
+                    <a class="wr-link" href="mailto:hello@talvo.app" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@talvo.app</a>.
                   </p>
                 </div>
               </td>
@@ -504,7 +514,7 @@ export const confirm = async (req, res) => {
             <tr>
               <td class="wr-section wr-section-last" style="font-family: Segoe UI, Arial, sans-serif; padding: 0 24px 24px; background-color: #ffffff; background: #ffffff; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding-bottom: 28px; border-bottom: 1px solid #e2e8f0; border-radius: 0 0 22px 22px;">
                 <div class="wr-surface" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
-                  <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">What WiseRank is optimized for</p>
+                  <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">What Talvo is optimized for</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
                     Recruiter clarity, visible scoring logic, and calmer hiring decisions. The product
                     and these emails should both feel direct, lightweight, and easy to act on.
@@ -514,9 +524,9 @@ export const confirm = async (req, res) => {
                 <div class="wr-divider" style="font-family: Segoe UI, Arial, sans-serif; height: 1px; background-color: #e2e8f0; background: #e2e8f0; line-height: 1px; font-size: 1px;">&nbsp;</div>
 
                 <div class="wr-footer" style="font-family: Segoe UI, Arial, sans-serif; padding: 18px 10px 0; text-align: center;">
-                  <p class="wr-footer-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b;">Thanks for choosing WiseRank.</p>
+                  <p class="wr-footer-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b;">Thanks for choosing Talvo.</p>
                   <p class="wr-footer-links" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b; margin-top: 8px;">
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
               </td>
@@ -597,15 +607,15 @@ export const confirm_get = async (req, res) => {
                 transporter.sendMail({
                     from: env.USER_EMAIL,
                     to: user.user_email,
-                    subject: "Onboarding, WiseRank",
-                    text: `Welcome to WiseRank`,
+                    subject: "Onboarding, Talvo",
+                    text: `Welcome to Talvo`,
                     html: `<!doctype html>
 <html lang="en" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc;">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>Welcome to WiseRank</title>
+    <title>Welcome to Talvo</title>
     
   <style>
 @media only screen and (max-width: 640px) {
@@ -664,7 +674,7 @@ export const confirm_get = async (req, res) => {
 </style>
   </head>
   <body class="wr-body" style="margin: 0; padding: 0; background-color: #f8fafc; background: #f8fafc; font-family: Segoe UI, Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; background: radial-gradient(circle at top, rgba(255, 140, 50, 0.12), transparent 34%), #f8fafc; color: #0f172a;">
-    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Your WiseRank workspace is ready. Start creating roles and screening candidates with explainable AI.</div>
+    <div class="wr-preheader" style="font-family: Segoe UI, Arial, sans-serif; display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">Your Talvo workspace is ready. Start creating roles and screening candidates with explainable AI.</div>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="wr-layout" bgcolor="#f8fafc" style="font-family: Segoe UI, Arial, sans-serif; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%; background-color: #f8fafc;">
       <tr>
@@ -682,7 +692,7 @@ export const confirm_get = async (req, res) => {
       <img src="https://res.cloudinary.com/da7sdnt5z/image/upload/v1777007048/icon_cifdka.png" width="46" height="46" />      
     </td>
     <td class="wr-brand-copy-cell" valign="middle" style="font-family: Segoe UI, Arial, sans-serif; padding-left: 12px; vertical-align: middle;">
-      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">WiseRank</div>
+      <div class="wr-brand-title" style="font-family: Segoe UI, Arial, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #f8fafc;">Talvo</div>
       <div class="wr-brand-subtitle" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 3px; font-size: 12px; color: rgba(248, 250, 252, 0.72);">Recruiter Workspace</div>
     </td>
   </tr>
@@ -691,12 +701,12 @@ export const confirm_get = async (req, res) => {
                 <div class="wr-kicker" style="font-family: Segoe UI, Arial, sans-serif; display: inline-block; margin-bottom: 14px; padding: 7px 12px; border: 1px solid rgba(255, 200, 130, 0.25); border-radius: 999px; background-color: rgba(255, 140, 50, 0.18); background: rgba(255, 140, 50, 0.18); color: #ffd4a0; font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">Workspace Ready</div>
                 <h1 class="wr-title" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 30px; line-height: 1.14; letter-spacing: -0.04em; color: #f8fafc;">Welcome aboard, ${user_first_name}</h1>
                 <p class="wr-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.65; color: rgba(241, 245, 249, 0.84);">
-                  WiseRank Recruiter Workspace is ready. You can now post roles, review applicants, and move
+                  Talvo Recruiter Workspace is ready. You can now post roles, review applicants, and move
                   faster with explainable AI-assisted shortlists.
                 </p>
 
                 <div class="wr-hero-actions" style="font-family: Segoe UI, Arial, sans-serif; margin-top: 18px;">
-                  <a class="wr-button" href="https://app.rankwise.dev/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32→#ea6c00); background: linear-gradient(#ff8c32→#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
+                  <a class="wr-button" href="https://app.talvo.app/dashboard" target="_blank" rel="noreferrer" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; display: inline-block; padding: 13px 20px; border-radius: 10px; background-color: linear-gradient(#ff8c32â†’#ea6c00); background: linear-gradient(#ff8c32â†’#ea6c00); color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: center;">
                     Open dashboard
                   </a>
                 </div>
@@ -756,9 +766,9 @@ export const confirm_get = async (req, res) => {
                 <div class="wr-surface wr-surface-muted" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); background-color: #f3fbf7; background: linear-gradient(180deg, rgba(255, 140, 50, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%); border-color: rgba(255, 140, 50, 0.22);">
                   <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">Helpful shortcuts</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
-                    Jump straight to your <a class="wr-link" href="https://app.rankwise.dev/dashboard" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">dashboard</a>,
-                    create a <a class="wr-link" href="https://app.rankwise.dev/dashboard/jobs/new" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">new role</a>, or reach the team at
-                    <a class="wr-link" href="mailto:hello@rankwise.io" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@rankwise.io</a>.
+                    Jump straight to your <a class="wr-link" href="https://app.talvo.app/dashboard" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">dashboard</a>,
+                    create a <a class="wr-link" href="https://app.talvo.app/dashboard/jobs/new" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">new role</a>, or reach the team at
+                    <a class="wr-link" href="mailto:hello@talvo.app" style="font-family: Segoe UI, Arial, sans-serif; color: inherit; text-decoration: none; color: #e07000 !important; font-weight: 700; text-decoration: underline;">hello@talvo.app</a>.
                   </p>
                 </div>
               </td>
@@ -767,7 +777,7 @@ export const confirm_get = async (req, res) => {
             <tr>
               <td class="wr-section wr-section-last" style="font-family: Segoe UI, Arial, sans-serif; padding: 0 24px 24px; background-color: #ffffff; background: #ffffff; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding-bottom: 28px; border-bottom: 1px solid #e2e8f0; border-radius: 0 0 22px 22px;">
                 <div class="wr-surface" style="font-family: Segoe UI, Arial, sans-serif; margin-bottom: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 18px; background-color: #ffffff; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
-                  <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">What WiseRank is optimized for</p>
+                  <p class="wr-heading" style="font-family: Segoe UI, Arial, sans-serif; margin: 0 0 10px; font-size: 21px; line-height: 1.28; letter-spacing: -0.03em; color: #0f172a;">What Talvo is optimized for</p>
                   <p class="wr-text" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 15px; line-height: 1.68; color: #475569;">
                     Recruiter clarity, visible scoring logic, and calmer hiring decisions. The product
                     and these emails should both feel direct, lightweight, and easy to act on.
@@ -777,9 +787,9 @@ export const confirm_get = async (req, res) => {
                 <div class="wr-divider" style="font-family: Segoe UI, Arial, sans-serif; height: 1px; background-color: #e2e8f0; background: #e2e8f0; line-height: 1px; font-size: 1px;">&nbsp;</div>
 
                 <div class="wr-footer" style="font-family: Segoe UI, Arial, sans-serif; padding: 18px 10px 0; text-align: center;">
-                  <p class="wr-footer-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b;">Thanks for choosing WiseRank.</p>
+                  <p class="wr-footer-copy" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b;">Thanks for choosing Talvo.</p>
                   <p class="wr-footer-links" style="font-family: Segoe UI, Arial, sans-serif; margin: 0; font-size: 12px; line-height: 1.8; color: #64748b; margin-top: 8px;">
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
               </td>
@@ -806,18 +816,13 @@ export const confirm_get = async (req, res) => {
 };
 export const logIn = async (req, res) => {
     try {
-        const { reqBody } = req.body;
+        const reqBody = req.body.reqBody ?? req.body;
         const user_details = loginSchema.parse(reqBody);
         const user = await User.findOne({ user_email: user_details.user_email });
         if (!user) {
             return res.status(404).json({
                 data_error: "User is not found.Kindly consider creating an account",
             });
-        }
-        if (user_details.user_pass !== user_details.user_pass_conf) {
-            return res
-                .status(400)
-                .json({ input_error: "Passwords must be the same" });
         }
         if (!user.isVerified) {
             return res
@@ -828,7 +833,34 @@ export const logIn = async (req, res) => {
         if (!check) {
             return res.status(401).json({ auth_error: "Invalid credentials" });
         }
-        res.status(200).json({ success: "Login successful" });
+        if (!ACCESS_SECRET || !REFRESH_SECRET) {
+            return res.status(500).json({ server_error: "Internal server error" });
+        }
+        const user_cookie_details = { userId: user._id };
+        const access_token = jwt.sign(user_cookie_details, ACCESS_SECRET, {
+            expiresIn: "1d",
+            algorithm: "HS256",
+        });
+        const refresh_token = jwt.sign(user_cookie_details, REFRESH_SECRET, {
+            expiresIn: "7d",
+            algorithm: "HS256",
+        });
+        user.refresh_token = refresh_token;
+        await user.save();
+        res.cookie("access_token", access_token, {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            sameSite: true,
+        });
+        res.status(200).json({
+            success: "Login successful",
+            user: {
+                id: String(user._id),
+                name: user.user_name,
+                email: user.user_email,
+                isVerified: user.isVerified,
+            },
+        });
     }
     catch (error) {
         if (error instanceof z.ZodError) {
@@ -893,7 +925,7 @@ export const forgot = async (req, res) => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>Reset your WiseRank password</title>
+    <title>Reset your Talvo password</title>
 
     <style>
       @media only screen and (max-width: 640px) {
@@ -992,7 +1024,7 @@ export const forgot = async (req, res) => {
         mso-hide: all;
       "
     >
-      A password reset was requested for your WiseRank account. Verify the
+      A password reset was requested for your Talvo account. Verify the
       request and choose a new password.
     </div>
 
@@ -1153,7 +1185,7 @@ export const forgot = async (req, res) => {
                           color: #f8fafc;
                         "
                       >
-                        WiseRank
+                        Talvo
                       </div>
                       <div
                         class="wr-brand-subtitle"
@@ -1225,7 +1257,7 @@ export const forgot = async (req, res) => {
                     color: rgba(241, 245, 249, 0.84);
                   "
                 >
-                  Hi ${user.user_name}, we received a reset request for the WiseRank
+                  Hi ${user.user_name}, we received a reset request for the Talvo
                   workspace connected to ${user.user_email}. Use this code if it was
                   you.
                 </p>
@@ -1748,7 +1780,7 @@ export const forgot = async (req, res) => {
                     Contact
                     <a
                       class="wr-link"
-                      href="mailto:hello@rankwise.io"
+                      href="mailto:hello@talvo.app"
                       style="
                         font-family:
                           Segoe UI,
@@ -1760,7 +1792,7 @@ export const forgot = async (req, res) => {
                         font-weight: 700;
                         text-decoration: underline;
                       "
-                      >hello@rankwise.io</a
+                      >hello@talvo.app</a
                     >
                     if you need help securing the account or completing the
                     reset.
@@ -1808,7 +1840,7 @@ export const forgot = async (req, res) => {
                       color: #64748b;
                     "
                   >
-                    Security note: only use password reset codes on WiseRank
+                    Security note: only use password reset codes on Talvo
                     pages you trust.
                   </p>
                   <p
@@ -1825,7 +1857,7 @@ export const forgot = async (req, res) => {
                       margin-top: 8px;
                     "
                   >
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
               </td>

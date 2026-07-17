@@ -58,6 +58,7 @@ export type SignupPayload = {
   user_email: string;
   user_pass: string;
   user_pass_conf: string;
+  company_name?: string;
 };
 
 export type CompleteJobPayload = {
@@ -185,7 +186,7 @@ type LegacyScreeningRunResponse = {
   };
 };
 
-const SCREENING_STORAGE_PREFIX = 'wiserank-screening:';
+const SCREENING_STORAGE_PREFIX = 'talvo-screening:';
 
 function normalizeCandidateList(value: string[] | string | undefined) {
   if (!value) {
@@ -432,7 +433,7 @@ async function mockGet<T>(path: string): Promise<MockResponse<T>> {
         user: {
           id: 'demo-user',
           name: 'A. Recruiter',
-          email: 'recruiter@rankwise.dev',
+          email: 'recruiter@talvo.dev',
           isVerified: true,
         },
       } as unknown as T,

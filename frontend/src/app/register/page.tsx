@@ -177,6 +177,7 @@ export default function RegisterPage() {
         user_email: email.trim(),
         user_pass: password,
         user_pass_conf: confirm,
+        company_name: "Talvo Demo Workspace",
       });
 
       if (signupResponse.verificationRequired) {

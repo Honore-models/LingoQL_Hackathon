@@ -28,15 +28,15 @@ function cannedAnswer(input: string) {
     return "You can filter by score bucket (Qualified/Maybe) and export/email the shortlist from the results screen. Want me to highlight the top 10 by AI Score and skills match?";
   }
   if (q.includes("job") && (q.includes("create") || q.includes("new"))) {
-    return "To create a job, go to Jobs → Create New Job. The form is 4 steps (Basic Info → Description → AI Criteria → Review & Launch). Tell me the role + must-have skills and I’ll draft the criteria text.";
+    return "To create a job, go to Jobs > Create New Job. The form is 4 steps: Basic Info, Description, AI Criteria, Review and Launch. Tell me the role plus must-have skills and I will draft the criteria text.";
   }
   if (q.includes("screening") || q.includes("analyzing")) {
-    return "Screening runs in 4 phases: Parsing Profiles → Scoring Candidates → Ranking Results → Generating Explanations. The progress screen auto-redirects to results after a short simulated run.";
+    return "Screening runs in 4 phases: Parsing profiles, scoring candidates, ranking results, and generating explanations. The progress screen auto-redirects to results after a short simulated run.";
   }
   if (q.includes("candidate") || q.includes("profile")) {
     return "Open any candidate to see AI score breakdown, strengths, and gaps. You can Shortlist, Reject, or Save for later from the header actions.";
   }
-  return "I can help draft job criteria, explain AI scores, and suggest next actions. Ask me something like: “Why is Aline a top candidate?” or “Draft screening questions for a Senior Full Stack Engineer.”";
+  return "I can help draft job criteria, explain AI scores, and suggest next actions. Ask me something like: Why is Aline a top candidate? or Draft screening questions for a Senior Full Stack Engineer.
 }
 
 export function ChatBotWidget() {
@@ -47,7 +47,7 @@ export function ChatBotWidget() {
     {
       id: uid(),
       role: "assistant",
-      text: "Hi! I'm WiseRank Assistant. I can help you create jobs, tune AI criteria, and interpret shortlist results.",
+      text: "Hi! I'm Talvo Assistant. I can help you create jobs, tune AI criteria, and interpret shortlist results.",
       ts: Date.now(),
     },
   ]);
@@ -118,7 +118,7 @@ export function ChatBotWidget() {
                 <div className="flex items-center gap-2">
                   <BrandMark className="h-9 w-9" />
                   <div>
-                    <div className="text-sm font-semibold">WiseRank Assistant</div>
+                    <div className="text-sm font-semibold">Talvo Assistant</div>
                     <div className="text-xs text-text-muted">Assistant for recruiter workflows</div>
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export function ChatBotWidget() {
                     if (e.key === "Enter") send();
                   }}
                   className="h-10 flex-1 rounded-input border border-border bg-card px-3 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:ring-2 focus:ring-accent/30"
-                  placeholder="Ask about jobs, screening, scores…"
+                  placeholder="Ask about jobs, screening, scores..."
                 />
                 <Button
                   type="button"

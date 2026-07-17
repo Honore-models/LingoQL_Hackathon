@@ -190,7 +190,7 @@ export function DashboardHeader() {
         </button>
 
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent ring-2 ring-accent/20">
-          {initials(currentUser?.name || "WiseRank")}
+          {initials(currentUser?.name || "Talvo")}
         </div>
       </div>
     </header>

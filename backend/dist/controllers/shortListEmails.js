@@ -34,7 +34,7 @@ const emailingController = async (req, res) => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>You have been shortlisted — WiseRank</title>
+    <title>You have been shortlisted â€” Talvo</title>
     <style>
 @media only screen and (max-width: 640px) {
   .wr-wrapper { padding: 14px 8px 24px; }
@@ -57,7 +57,7 @@ const emailingController = async (req, res) => {
 
     <!-- Preheader -->
     <div style="display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">
-      Congratulations — you have been shortlisted for the Senior Frontend Engineer role at WiseRank. Here is what happens next.
+      Congratulations â€” you have been shortlisted for the Senior Frontend Engineer role at Talvo. Here is what happens next.
     </div>
 
     <!-- Layout -->
@@ -66,7 +66,7 @@ const emailingController = async (req, res) => {
         <td align="center" class="wr-wrapper" style="padding: 24px 14px 36px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family: Segoe UI, Arial, sans-serif; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%; max-width: 640px;">
 
-            <!-- ── HERO ── -->
+            <!-- â”€â”€ HERO â”€â”€ -->
             <tr>
               <td class="wr-hero" style="padding: 28px 28px 24px; border-radius: 22px 22px 0 0; background-color: #1a0f05; background: radial-gradient(circle at 92% 14%, rgba(251, 191, 120, 0.24), transparent 22%), linear-gradient(135deg, #2d1a08 0%, #1a0f05 58%, #0d0602 100%); color: #fdf8f4;">
 
@@ -79,7 +79,7 @@ const emailingController = async (req, res) => {
                       <!--<![endif]-->
                     </td>
                     <td valign="middle" style="padding-left: 12px; vertical-align: middle;">
-                      <div style="font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #fdf8f4;">WiseRank</div>
+                      <div style="font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #fdf8f4;">Talvo</div>
                       <div style="margin-top: 3px; font-size: 12px; color: rgba(253, 248, 244, 0.72);">Recruiter Workspace</div>
                     </td>
                   </tr>
@@ -94,13 +94,13 @@ const emailingController = async (req, res) => {
                   You have been shortlisted, ${shortlisted.first_name}
                 </h1>
                 <p style="margin: 0; font-size: 15px; line-height: 1.65; color: rgba(253, 248, 244, 0.84);">
-                  Your application for <strong style="color: #fdf8f4;">{{jobTitle}}</strong> at <strong style="color: #fdf8f4;">${company_name}</strong> stood out. The hiring team has moved you forward — read on to see what comes next.
+                  Your application for <strong style="color: #fdf8f4;">{{jobTitle}}</strong> at <strong style="color: #fdf8f4;">${company_name}</strong> stood out. The hiring team has moved you forward â€” read on to see what comes next.
                 </p>
 
               </td>
             </tr>
 
-            <!-- ── ROLE DETAIL CARD ── -->
+            <!-- â”€â”€ ROLE DETAIL CARD â”€â”€ -->
             <tr>
               <td class="wr-section wr-section-first" style="padding: 24px 24px 0; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da;">
 
@@ -132,7 +132,7 @@ const emailingController = async (req, res) => {
               </td>
             </tr>
 
-            <!-- ── WHAT HAPPENS NEXT ── -->
+            <!-- â”€â”€ WHAT HAPPENS NEXT â”€â”€ -->
             <tr>
               <td class="wr-section" style="padding: 16px 24px 0; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da;">
 
@@ -169,7 +169,7 @@ const emailingController = async (req, res) => {
               </td>
             </tr>
 
-            <!-- ── BOTTOM SECTION ── -->
+            <!-- â”€â”€ BOTTOM SECTION â”€â”€ -->
             <tr>
               <td class="wr-section wr-section-last" style="padding: 16px 24px 28px; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da; border-bottom: 1px solid #f0e6da; border-radius: 0 0 22px 22px;">
 
@@ -237,10 +237,10 @@ const emailingController = async (req, res) => {
                 <div style="padding: 18px 10px 0; text-align: center;">
                   <p style="margin: 0; font-size: 12px; line-height: 1.8; color: #7a5c42;">
                     Questions about your application? Reach us at
-                    <a href="mailto:hello@rankwise.io" style="color: #c2520f !important; font-weight: 700; text-decoration: underline;">hello@rankwise.io</a>
+                    <a href="mailto:hello@talvo.app" style="color: #c2520f !important; font-weight: 700; text-decoration: underline;">hello@talvo.app</a>
                   </p>
                   <p style="margin: 8px 0 0; font-size: 12px; line-height: 1.8; color: #7a5c42;">
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
 
@@ -282,7 +282,7 @@ const emailingController = async (req, res) => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
-    <title>Your application — WiseRank</title>
+    <title>Your application â€” Talvo</title>
     <style>
 @media only screen and (max-width: 640px) {
   .wr-wrapper { padding: 14px 8px 24px; }
@@ -305,7 +305,7 @@ const emailingController = async (req, res) => {
 
     <!-- Preheader -->
     <div style="display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all;">
-      Thank you for applying — we have carefully reviewed your application and will not be moving forward at this time.
+      Thank you for applying â€” we have carefully reviewed your application and will not be moving forward at this time.
     </div>
 
     <!-- Layout -->
@@ -314,7 +314,7 @@ const emailingController = async (req, res) => {
         <td align="center" class="wr-wrapper" style="padding: 24px 14px 36px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family: Segoe UI, Arial, sans-serif; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%; max-width: 640px;">
 
-            <!-- ── HERO ── -->
+            <!-- â”€â”€ HERO â”€â”€ -->
             <tr>
               <td class="wr-hero" style="padding: 28px 28px 24px; border-radius: 22px 22px 0 0; background-color: #1a0f05; background: radial-gradient(circle at 92% 14%, rgba(251, 191, 120, 0.24), transparent 22%), linear-gradient(135deg, #2d1a08 0%, #1a0f05 58%, #0d0602 100%); color: #fdf8f4;">
 
@@ -327,7 +327,7 @@ const emailingController = async (req, res) => {
                       <!--<![endif]-->
                     </td>
                     <td valign="middle" style="padding-left: 12px; vertical-align: middle;">
-                      <div style="font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #fdf8f4;">WiseRank</div>
+                      <div style="font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #fdf8f4;">Talvo</div>
                       <div style="margin-top: 3px; font-size: 12px; color: rgba(253, 248, 244, 0.60);">Recruiter Workspace</div>
                     </td>
                   </tr>
@@ -348,7 +348,7 @@ const emailingController = async (req, res) => {
               </td>
             </tr>
 
-            <!-- ── ROLE DETAIL CARD ── -->
+            <!-- â”€â”€ ROLE DETAIL CARD â”€â”€ -->
             <tr>
               <td class="wr-section wr-section-first" style="padding: 24px 24px 0; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da;">
 
@@ -380,21 +380,21 @@ const emailingController = async (req, res) => {
               </td>
             </tr>
 
-            <!-- ── A PERSONAL NOTE ── -->
+            <!-- â”€â”€ A PERSONAL NOTE â”€â”€ -->
             <tr>
               <td class="wr-section" style="padding: 16px 24px 0; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da;">
 
                 <div style="margin-bottom: 16px; padding: 20px; border: 1px solid rgba(251, 146, 60, 0.20); border-radius: 18px; background: linear-gradient(180deg, rgba(251, 146, 60, 0.08) 0%, rgba(26, 15, 5, 0.02) 100%);">
                   <p style="margin: 0 0 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #c2520f;">A note from the team</p>
                   <p style="margin: 0; font-size: 15px; line-height: 1.68; color: #5c3d20;">
-                    This was a genuinely difficult decision — we received a strong pool of candidates. This outcome reflects the competitive nature of this particular role and not a judgment on your overall abilities or potential.
+                    This was a genuinely difficult decision â€” we received a strong pool of candidates. This outcome reflects the competitive nature of this particular role and not a judgment on your overall abilities or potential.
                   </p>
                 </div>
 
               </td>
             </tr>
 
-            <!-- ── WHAT YOU CAN DO NOW ── -->
+            <!-- â”€â”€ WHAT YOU CAN DO NOW â”€â”€ -->
             <tr>
               <td class="wr-section" style="padding: 16px 24px 0; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da;">
 
@@ -431,7 +431,7 @@ const emailingController = async (req, res) => {
               </td>
             </tr>
 
-            <!-- ── BOTTOM SECTION ── -->
+            <!-- â”€â”€ BOTTOM SECTION â”€â”€ -->
             <tr>
               <td class="wr-section wr-section-last" style="padding: 16px 24px 28px; background-color: #ffffff; border-left: 1px solid #f0e6da; border-right: 1px solid #f0e6da; border-bottom: 1px solid #f0e6da; border-radius: 0 0 22px 22px;">
 
@@ -461,7 +461,7 @@ const emailingController = async (req, res) => {
                               <span style="display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 999px; background: rgba(251, 146, 60, 0.14); color: #c2520f; font-size: 13px; font-weight: 800;">2</span>
                             </td>
                             <td valign="top">
-                              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #5c3d20;"><strong style="color: #1a0f05;">Lead with measurable impact.</strong> Hiring teams respond to concrete numbers — percentages, timelines, and outcomes tell a clearer story than responsibilities alone.</p>
+                              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #5c3d20;"><strong style="color: #1a0f05;">Lead with measurable impact.</strong> Hiring teams respond to concrete numbers â€” percentages, timelines, and outcomes tell a clearer story than responsibilities alone.</p>
                             </td>
                           </tr>
                         </table>
@@ -491,10 +491,10 @@ const emailingController = async (req, res) => {
                 <div style="padding: 18px 10px 0; text-align: center;">
                   <p style="margin: 0; font-size: 12px; line-height: 1.8; color: #7a5c42;">
                     Questions about your application? Reach us at
-                    <a href="mailto:hello@rankwise.io" style="color: #c2520f !important; font-weight: 700; text-decoration: underline;">hello@rankwise.io</a>
+                    <a href="mailto:hello@talvo.app" style="color: #c2520f !important; font-weight: 700; text-decoration: underline;">hello@talvo.app</a>
                   </p>
                   <p style="margin: 8px 0 0; font-size: 12px; line-height: 1.8; color: #7a5c42;">
-                    WiseRank &middot; Kigali, Rwanda &middot; &copy; 2026
+                    Talvo &middot; Kigali, Rwanda &middot; &copy; 2026
                   </p>
                 </div>
 

@@ -29,7 +29,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5000
-      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/rankwise}
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/talvo}
     ports:
       - "5000:5000"
     healthcheck:

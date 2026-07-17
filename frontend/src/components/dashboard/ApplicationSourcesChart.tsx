@@ -3,7 +3,7 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const data = [
-  { name: "Umurava", value: 38, color: "#10B981" },
+  { name: "Spreadsheet", value: 38, color: "#10B981" },
   { name: "Referral", value: 26, color: "#06B6D4" },
   { name: "Company site", value: 22, color: "#3B82F6" },
   { name: "LinkedIn", value: 14, color: "#8B5CF6" },

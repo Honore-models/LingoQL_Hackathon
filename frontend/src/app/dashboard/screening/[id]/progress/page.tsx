@@ -194,7 +194,7 @@ export default function ScreeningProgressPage() {
         </motion.div>
 
         <h1 className="mt-6 text-3xl font-bold tracking-tight">
-          AI is analyzing your candidates…
+          AI is analyzing your candidatesâ€¦
         </h1>
         <p className="mt-2 text-white/80">{subtitle}</p>
 
@@ -229,7 +229,7 @@ export default function ScreeningProgressPage() {
                 >
                   <div className="text-sm font-semibold">{step}</div>
                   <div className="mt-1 text-xs text-white/75">
-                    {done ? 'Complete' : active ? 'In progress…' : 'Queued'}
+                    {done ? 'Complete' : active ? 'In progressâ€¦' : 'Queued'}
                   </div>
                 </motion.div>
               );

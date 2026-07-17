@@ -160,7 +160,7 @@ export function BrandLogo({
       <BrandMark className={styles.mark} />
       {showWordmark ? (
         <div className="min-w-0 leading-none">
-          <div className={cn("font-extrabold tracking-tight", styles.title, toneStyle.title)}>WiseRank</div>
+          <div className={cn("font-extrabold tracking-tight", styles.title, toneStyle.title)}>Talvo</div>
           {subtitle ? (
             <div className={cn("mt-1 font-medium", styles.subtitle, toneStyle.subtitle)}>{subtitle}</div>
           ) : null}

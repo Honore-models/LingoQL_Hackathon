@@ -92,14 +92,14 @@ export default function LandingPage() {
             <div className="mx-auto max-w-3xl text-center">
               <p className="inline-flex items-center gap-2 rounded-badge border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
                 <Sparkles className="h-3.5 w-3.5" />
-                Umurava AI Hackathon · Recruiter-first screening
+                LingoQL Hackathon - Sub0-powered talent intelligence
               </p>
               <h1 className="mt-6 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl sm:leading-tight">
                 Screen candidates with clarity, speed, and explainable AI
               </h1>
               <p className="mt-5 text-lg text-text-muted sm:text-xl">
-                WiseRank helps HR teams ingest applicants, run consistent scoring against your
-                criteria, and shortlist with reasoning your hiring managers can trust.
+                Talvo helps HR teams ingest applicants, query messy talent data, run consistent
+                scoring, and shortlist with reasoning hiring managers can trust.
               </p>
               <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                 <Link href={ROUTES.register} className="sm:w-auto">
@@ -114,7 +114,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="mt-6 text-sm text-text-muted">
-                No backend required for the demo — explore the full UI after sign-in.
+                Built for a live demo path: job brief, candidate intake, AI screening, and shortlist review.
               </p>
             </div>
 
@@ -166,7 +166,7 @@ export default function LandingPage() {
               Everything recruiters need in one flow
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-center text-text-muted">
-              From job creation to shortlist — designed for teams who care about fairness, auditability,
+              From job creation to shortlist - designed for teams who care about fairness, auditability,
               and a world-class candidate experience.
             </p>
             <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -174,12 +174,12 @@ export default function LandingPage() {
                 {
                   icon: Brain,
                   title: "AI criteria you control",
-                  body: "Must-haves, deal-breakers, and shortlist size — tuned to your role.",
+                  body: "Must-haves, deal-breakers, and shortlist size - tuned to your role.",
                 },
                 {
                   icon: Users,
                   title: "Unified ingestion",
-                  body: "Umurava profiles or external uploads — one pipeline for screening.",
+                  body: "Spreadsheet profiles and resume uploads - one pipeline for screening.",
                 },
                 {
                   icon: BarChart3,
@@ -241,7 +241,7 @@ export default function LandingPage() {
                     </Button>
                   </Link>
                   <Link href={ROUTES.dashboard} className="w-full text-center text-sm font-semibold text-white/90 underline-offset-4 hover:underline sm:w-auto">
-                    Skip to app demo →
+                    Skip to app demo ->
                   </Link>
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function LandingPage() {
 
       <footer className="border-t border-border py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-text-muted sm:flex-row sm:px-6">
-          <p>© {new Date().getFullYear()} WiseRank · Demo frontend</p>
+          <p>Ãƒâ€šÃ‚Â© {new Date().getFullYear()} Talvo Ãƒâ€šÃ‚Â· LingoQL Hackathon</p>
           <div className="flex gap-6">
             <Link href="/about" className="hover:text-text-primary transition-colors">
               About

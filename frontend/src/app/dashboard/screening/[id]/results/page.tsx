@@ -122,9 +122,9 @@ function CandidateCard({
                   ) : null}
                 </div>
                 <div className="mt-1 text-sm text-text-muted">
-                  {displayRole} • {location}
+                  {displayRole} â€¢ {location}
                   {typeof yearsExperience === 'number'
-                    ? ` • ${yearsExperience} yrs`
+                    ? ` â€¢ ${yearsExperience} yrs`
                     : ''}
                 </div>
               </div>
@@ -162,7 +162,7 @@ function CandidateCard({
                 className="text-sm font-semibold text-accent hover:text-accent-hover"
                 href={`/dashboard/candidates/${candidate.id}`}
               >
-                View detailed analysis →
+                View detailed analysis â†’
               </Link>
             </div>
           ) : null}
@@ -368,7 +368,7 @@ export default function ResultsPage() {
     : (analysis?.generatedAtISO ?? new Date().toISOString());
   const jobTitle = job?.title ?? analysis?.jobTitle ?? mockJob.title;
   const jobSubtitle = job
-    ? `${job.title} • ${job.department}`
+    ? `${job.title} â€¢ ${job.department}`
     : (analysis?.jobTitle ?? 'Screening results');
 
   return (
@@ -482,7 +482,7 @@ export default function ResultsPage() {
               value={q}
               onChange={(event) => setQ(event.target.value)}
               className="h-10 w-full rounded-input border border-border bg-card pl-10 pr-3 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:ring-2 focus:ring-accent/30"
-              placeholder="Search candidates…"
+              placeholder="Search candidatesâ€¦"
             />
           </div>
 
