@@ -156,7 +156,7 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-2">
                   <input 
                     type="password" 
-                    value="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
+                    value="••••••••••••••••"
                     readOnly
                     className="flex-1 rounded-input border border-border bg-bg px-4 py-2.5 text-sm text-text-primary"
                   />

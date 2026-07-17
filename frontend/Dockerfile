@@ -1,7 +1,7 @@
 FROM node:24-slim AS deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 FROM node:24-slim AS builder
 WORKDIR /app

@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { ApplicationSourcesChart } from "@/components/dashboard/ApplicationSourcesChart";
 import { CandidateInflowChart } from "@/components/dashboard/CandidateInflowChart";
+import { HiringWorkflowTimeline } from "@/components/dashboard/HiringWorkflowTimeline";
+import { QueryTalentPanel } from "@/components/dashboard/QueryTalentPanel";
 import { ScreeningTargetsCard } from "@/components/dashboard/ScreeningTargetsCard";
 import { StatSparkline } from "@/components/dashboard/StatSparkline";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -264,6 +266,11 @@ export default function DashboardPage() {
           spark={sparkFromSeed(10)}
           loading={isLoading}
         />
+      </div>
+
+      <div className="mt-8 space-y-6">
+        <HiringWorkflowTimeline activeStep={3} />
+        <QueryTalentPanel />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.25fr)_360px]">

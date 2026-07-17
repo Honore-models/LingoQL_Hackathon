@@ -325,7 +325,7 @@ export default function CandidateDetailPage() {
                         Latest AI assessment
                       </div>
                       <div className="mt-1 text-sm text-text-muted">
-                        {screeningMatch.analysis.jobTitle} â€¢{' '}
+                        {screeningMatch.analysis.jobTitle} ·{' '}
                         {formatShortDate(
                           screeningMatch.analysis.generatedAtISO
                         )}

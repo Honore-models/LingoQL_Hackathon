@@ -89,7 +89,7 @@ export const mockCandidates: Candidate[] = [
       technical: ["TypeScript", "React", "Node.js", "PostgreSQL", "Docker", "AWS"],
       soft: ["Ownership", "Communication", "Mentoring"],
     },
-    education: ["BSc Computer Science â€” University of Rwanda"],
+    education: ["BSc Computer Science — University of Rwanda"],
     workHistory: [
       {
         role: "Full Stack Engineer",
@@ -119,7 +119,7 @@ export const mockCandidates: Candidate[] = [
       technical: ["Node.js", "SQL", "Kafka", "Redis", "REST", "System Design"],
       soft: ["Problem Solving", "Stakeholder Management"],
     },
-    education: ["BEng Software Engineering â€” AUCA"],
+    education: ["BEng Software Engineering — AUCA"],
     workHistory: [
       {
         role: "Backend Engineer",
@@ -142,7 +142,7 @@ export const mockCandidates: Candidate[] = [
       technical: ["React", "Next.js", "Tailwind", "TypeScript", "Testing Library"],
       soft: ["Collaboration", "User empathy"],
     },
-    education: ["BSc Information Systems â€” University of Rwanda"],
+    education: ["BSc Information Systems — University of Rwanda"],
     workHistory: [
       {
         role: "Frontend Engineer",

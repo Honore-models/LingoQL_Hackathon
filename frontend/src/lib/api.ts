@@ -895,3 +895,132 @@ export async function runScreening(
   storeScreeningAnalysis(analysis);
   return analysis;
 }
+
+export type TalentQueryPayload = {
+  question: string;
+  job_id?: string;
+  applicant_ids?: string[];
+  max_applicants?: number;
+};
+
+export type TalentQueryResponse = {
+  answer: string;
+  suggestedNextQuestions: string[];
+  context?: {
+    jobId?: string | null;
+    applicantCount?: number;
+  };
+};
+
+function buildMockTalentQueryAnswer(question: string): TalentQueryResponse {
+  const q = question.toLowerCase();
+  const backendCandidates = mockCandidates.filter((candidate) => {
+    const skills = candidate.skills.technical.map((skill) => skill.toLowerCase());
+    const hasPostgres = skills.some((skill) => skill.includes('postgres'));
+    const isBackend =
+      candidate.currentTitle.toLowerCase().includes('backend') ||
+      skills.some((skill) => skill.includes('node') || skill.includes('sql'));
+    return hasPostgres && isBackend && candidate.yearsExperience >= 3;
+  });
+
+  const reactCandidates = [...mockCandidates].sort((left, right) => {
+    const leftScore = left.skills.technical.filter((skill) =>
+      skill.toLowerCase().includes('react')
+    ).length;
+    const rightScore = right.skills.technical.filter((skill) =>
+      skill.toLowerCase().includes('react')
+    ).length;
+    return rightScore - leftScore;
+  });
+
+  const weakEducation = mockCandidateScores
+    .filter((score) => score.educationPct < 70)
+    .map((score) => {
+      const candidate = mockCandidates.find((item) => item.id === score.candidateId);
+      return candidate
+        ? `${candidate.name} (${score.educationPct}% education match, ${score.score}% overall)`
+        : null;
+    })
+    .filter(Boolean);
+
+  if (q.includes('postgres') || (q.includes('backend') && q.includes('year'))) {
+    const names = backendCandidates.map(
+      (candidate) =>
+        `${candidate.name} — ${candidate.yearsExperience} yrs, ${candidate.skills.technical.join(', ')}`
+    );
+    return {
+      answer:
+        names.length > 0
+          ? `Found ${names.length} backend candidate(s) with PostgreSQL and 3+ years:\n\n${names.join('\n')}`
+          : 'No mock candidates match PostgreSQL + 3+ years backend criteria. Try widening the search.',
+      suggestedNextQuestions: [
+        'Which of these candidates has the highest AI screening score?',
+        'Compare backend candidates on system design experience.',
+      ],
+      context: { jobId: 'job_001', applicantCount: backendCandidates.length },
+    };
+  }
+
+  if (q.includes('react')) {
+    const top = reactCandidates[0];
+    return {
+      answer: top
+        ? `Strongest React signal in the mock pool: ${top.name} (${top.currentTitle}) with ${top.skills.technical.join(', ')}.`
+        : 'No React-focused candidates found in the mock dataset.',
+      suggestedNextQuestions: [
+        'Who has the best Next.js experience?',
+        'Show candidates with React and 5+ years experience.',
+      ],
+      context: { jobId: 'job_001', applicantCount: mockCandidates.length },
+    };
+  }
+
+  if (q.includes('education') || q.includes('shortlist')) {
+    return {
+      answer:
+        weakEducation.length > 0
+          ? `Shortlisted candidates with weaker education match:\n\n${weakEducation.join('\n')}`
+          : 'All shortlisted mock candidates show solid education alignment (70%+).',
+      suggestedNextQuestions: [
+        'Who has the strongest overall screening score?',
+        'List candidates with gaps in backend depth.',
+      ],
+      context: { jobId: 'job_001', applicantCount: mockCandidates.length },
+    };
+  }
+
+  return {
+    answer: `Based on ${mockCandidates.length} structured applicants in Sub0, focus on Honore (92% match) for full-stack depth, Neza for backend systems, and Robert for frontend craftsmanship. Ask a more specific filter to narrow results.`,
+    suggestedNextQuestions: EXAMPLE_TALENT_QUESTIONS,
+    context: { jobId: null, applicantCount: mockCandidates.length },
+  };
+}
+
+const EXAMPLE_TALENT_QUESTIONS = [
+  'Show backend candidates with PostgreSQL and 3+ years.',
+  'Which candidates have the strongest React experience?',
+  'Find shortlisted candidates with weak education match.',
+];
+
+export async function askTalentQuery(
+  payload: TalentQueryPayload
+): Promise<TalentQueryResponse> {
+  if (isMockMode()) {
+    await sleep(600);
+    return buildMockTalentQueryAnswer(payload.question);
+  }
+
+  const response = await api.post<TalentQueryResponse>('/ai/ask', {
+    question: payload.question,
+    job_id: payload.job_id,
+    applicant_ids: payload.applicant_ids,
+    max_applicants: payload.max_applicants ?? 50,
+  });
+
+  return {
+    answer: response.data.answer,
+    suggestedNextQuestions:
+      response.data.suggestedNextQuestions ?? EXAMPLE_TALENT_QUESTIONS,
+    context: response.data.context,
+  };
+}
