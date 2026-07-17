@@ -1,0 +1,24 @@
+{
+  "title": "Talvo Dashboard API (Sub0)",
+  "description": "Recruiter overview aggregating jobs, applicants, and screening stats.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "summary": "Dashboard overview for authenticated recruiter",
+      "auth": "required",
+      "response": {
+        "applicants": "applicants[]",
+        "jobs": "jobs[]",
+        "stats": {
+          "totalJobs": "number",
+          "totalApplicants": "number",
+          "shortlistedCount": "number",
+          "screeningRunsCount": "number",
+          "avgMatchScore": "number"
+        }
+      },
+      "expressFallback": "GET /dashboard"
+    }
+  ]
+}

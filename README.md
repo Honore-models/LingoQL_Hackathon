@@ -1,70 +1,174 @@
 # Talvo
 
-Talvo is a recruiter-facing talent intelligence workspace for the Zero to Query: LingoQL Hackathon. It turns messy applicant spreadsheets and resumes into structured candidate profiles, runs explainable AI screening, and gives recruiters a queryable shortlist workflow.
+**Sub0-powered talent intelligence** for the Zero to Query: LingoQL Hackathon.
 
-## Hackathon Positioning
+Talvo turns messy applicant spreadsheets and resumes into structured, queryable candidate profiles, runs explainable AI screening, and gives recruiters a natural-language shortlist workflow.
 
-- **Innovation:** natural-language talent intelligence plus explainable AI screening, not just resume ranking.
-- **Technical implementation:** Next.js frontend, Express/Gemini worker, MongoDB today, and a Sub0-ready backend model/API plan for deployment on LingoQL infrastructure.
-- **Practical utility:** recruiters can create a job, ingest candidates, run AI scoring, review strengths/gaps, and move candidates to shortlist/reject decisions.
-- **Presentation:** demo path is designed around one clear recruiter journey.
+> **Pitch:** Talvo is a Sub0-powered talent intelligence workflow that turns messy applicant data into queryable, explainable hiring decisions.
 
-## Current Stack
+## Problem
 
-- Frontend: Next.js, TypeScript, Tailwind CSS, React Query, Redux Toolkit.
-- Backend: Express, TypeScript, MongoDB/Mongoose, Gemini, Cloudinary optional resume storage.
-- Deployment target: frontend on LingoQL; backend data/API layer through Sub0, with the existing Node service retained as the AI worker if needed.
+Recruiters receive unstructured applicant data (spreadsheets, PDFs, emails) and struggle to screen consistently, explain decisions, and query talent pools without manual spreadsheet work.
 
-## Required Keys
+## Solution
 
-Minimum for local non-AI flows:
+Talvo provides an end-to-end recruiter workflow:
 
-- `MONGO_URI`
-- `ACCESS_SECRET`
-- `REFRESH_SECRET`
+1. Create a job with AI screening criteria
+2. Ingest applicants from spreadsheets or resume uploads
+3. Run Gemini-powered screening with strengths, gaps, and recommendations
+4. Query talent data in natural language ("Show backend candidates with PostgreSQL and 3+ years")
+5. Review ranked shortlists and move candidates forward
 
-Needed for AI screening:
+## Architecture: LingoQL + Sub0 + Express
 
-- `GOOGLE_API_KEY`
-- `GOOGLE_AI_MODEL` such as `gemini-1.5-flash`
+Talvo uses **three layers** — not just frontend hosting:
 
-Optional:
+```
+┌─────────────────────┐
+│  Next.js Frontend   │  Deployed on LingoQL (Vercel-style)
+│  (this repo/frontend)│
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Sub0               │  Production backend: models, CRUD, queries, audit
+│  users, jobs,       │  See sub0/ for JSON schema + API specs
+│  applicants,        │
+│  screening_*        │
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Express AI Worker  │  Gemini screening + NL talent queries
+│  (this repo/backend)│  Reads/writes Sub0; MongoDB for local dev only
+└─────────────────────┘
+```
 
-- `CLOUDINARY_API_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` for resume ZIP storage.
-- `USER_EMAIL`, `USER_PASS` for real email. Without these, signup returns `devOtpToken` so the demo can continue.
-- LingoQL/Sub0 deployment credentials once you create the project.
+| Component | Role | Hackathon requirement |
+|-----------|------|----------------------|
+| **LingoQL** | Hosts Next.js frontend | Deployment platform |
+| **Sub0** | Backend data + API layer | **Required for technical score** |
+| **Express + Gemini** | AI worker for screening and recruiter assistant | Bridge when Sub0 does not host long-running AI jobs |
+| **MongoDB** | Local dev fallback mirroring Sub0 schemas | Demo reliability when Sub0 credentials unavailable |
+
+### How Sub0 powers Talvo
+
+Sub0 owns all core backend functionality:
+
+- **Models:** `users`, `jobs`, `applicants`, `resumes`, `screening_runs`, `screening_results`, `audit_events`
+- **APIs:** dashboard, job creation, applicant import, screening lifecycle, talent query
+- **Specs:** documented in [`sub0/`](./sub0/) with JSON schemas and Express route mappings
+
+The Express service maps to Sub0 today for local development and acts as the **Gemini AI worker** in production:
+
+| Express route (local) | Sub0 API (production) | Notes |
+|-----------------------|----------------------|-------|
+| `GET /dashboard` | `GET /dashboard` | Sub0 aggregates stats |
+| `POST /complete-job` | `POST /jobs` | Job CRUD in Sub0 |
+| `POST /register-candidate` | `POST /applicants/import` | Normalized intake |
+| `POST /ai/run` | `POST /screening-runs` | Worker writes results to Sub0 |
+| `POST /ai/ask` | `POST /talent-query` | NL queries over Sub0 data |
+
+See [SUB0_PLAN.md](./SUB0_PLAN.md) and [sub0/README.md](./sub0/README.md) for full migration plan.
+
+## Tech Stack
+
+- **Frontend:** Next.js 16, TypeScript, Tailwind CSS, React Query, Redux Toolkit
+- **Sub0:** Production models and APIs (see `sub0/`)
+- **AI Worker:** Express 5, TypeScript, Gemini (Google AI)
+- **Local dev DB:** MongoDB/Mongoose (mirrors Sub0 schemas)
+- **Deployment:** Frontend on LingoQL; backend data on Sub0
+
+## Required API Keys
+
+### Required
+
+| Key | Purpose |
+|-----|---------|
+| `MONGO_URI` | Local dev database (mirrors Sub0 schemas) |
+| `ACCESS_SECRET` | JWT access token signing |
+| `REFRESH_SECRET` | JWT refresh token signing |
+| `GOOGLE_API_KEY` | Gemini AI screening and talent queries |
+| `GOOGLE_AI_MODEL` | e.g. `gemini-1.5-flash` |
+
+### Optional
+
+| Key | Purpose |
+|-----|---------|
+| `CLOUDINARY_API_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Resume ZIP storage |
+| `USER_EMAIL`, `USER_PASS` | SMTP for real emails (without these, signup returns `devOtpToken`) |
+| Sub0 / LingoQL credentials | Production deployment |
 
 ## Local Setup
 
 ```bash
-npm run install:all
+# Install dependencies
+cd backend && npm install
+cd ../frontend && npm ci
+
+# Configure environment
 copy backend\.env.example backend\.env
 copy frontend\.env.example frontend\.env
-npm run build:backend
+
+# Build
+cd ../backend && npm run build
+cd ../frontend && npm run build
 ```
 
-Run locally:
+**Mock mode:** Leave `NEXT_PUBLIC_API_URL` unset in `frontend/.env` — the app runs with local mock data (reliable for judging).
+
+**Live API mode:** Set `NEXT_PUBLIC_API_URL=http://localhost:3001` (or your Express worker URL).
+
+### Docker
 
 ```bash
 docker compose up --build
 ```
 
-Or run services separately:
+## Demo Flow (for judges)
 
-```bash
-npm run dev:backend
-npm run dev:frontend
-```
+1. **Landing** — "Sub0-powered talent intelligence" positioning
+2. **Register/Login** — dev OTP returned if SMTP not configured
+3. **Dashboard** — hiring workflow timeline, stats, recent jobs
+4. **Create Job** — multi-step builder with AI criteria
+5. **Import Candidates** — spreadsheet or manual entry
+6. **Run AI Screening** — progress animation, then ranked results with strengths/gaps
+7. **Query Talent** — natural-language search over candidate pool
+8. **Architecture slide** — LingoQL hosts frontend, Sub0 owns data/APIs, Express runs Gemini
 
-## Demo Flow
+## Screenshots
 
-1. Create an account. If SMTP is not configured, the backend returns a dev OTP automatically.
-2. Create a job from the dashboard.
-3. Upload or manually register candidates.
-4. Run AI screening.
-5. Review ranked candidates with strengths, gaps, and recommendation text.
-6. Pitch the Sub0 model/API layer as the production backend path.
+<!-- Add screenshots before submission -->
+| Screen | Path |
+|--------|------|
+| Landing | `docs/screenshots/landing.png` |
+| Dashboard | `docs/screenshots/dashboard.png` |
+| Screening Results | `docs/screenshots/screening-results.png` |
+| Query Talent | `docs/screenshots/talent-query.png` |
+| Sub0 Models | `docs/screenshots/sub0-models.png` |
 
-## Sub0/LingoQL Plan
+## Submission Checklist
 
-See [SUB0_PLAN.md](./SUB0_PLAN.md).
+- [ ] Frontend deployed on LingoQL with live URL
+- [ ] Sub0 models created (`sub0/models/*.json`)
+- [ ] Sub0 APIs wired (`sub0/apis/*.json`)
+- [ ] Express AI worker connected to Sub0 for screening
+- [ ] Demo video shows full recruiter workflow
+- [ ] README explains LingoQL vs Sub0 roles clearly
+- [ ] Mock mode works without API keys
+- [ ] Screenshots added to `docs/screenshots/`
+
+## Hackathon Scoring Alignment
+
+| Criterion | How Talvo addresses it |
+|-----------|----------------------|
+| Innovation (25%) | NL talent queries + explainable AI screening |
+| Technical (30%) | Sub0 backend models/APIs + Gemini worker + LingoQL deploy |
+| Practical utility (25%) | Full recruiter workflow from intake to shortlist |
+| Presentation (20%) | Clear demo path, workflow timeline, architecture story |
+
+## Further Reading
+
+- [SUB0_PLAN.md](./SUB0_PLAN.md) — migration plan and Express mapping
+- [sub0/](./sub0/) — Sub0 model and API JSON specs

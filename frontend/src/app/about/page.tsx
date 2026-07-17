@@ -46,14 +46,16 @@ export default function AboutPage() {
       <main className="px-4 py-12 sm:px-6 sm:py-16">
         {/* Hero Section */}
         <section className="mx-auto mb-16 max-w-4xl text-center sm:mb-20">
-          <div className="mb-6 inline-block rounded-full bg-accent/10 px-4 py-2">
-            <p className="text-sm font-semibold text-accent">About Talvo</p>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2">
+            <Sparkles className="h-4 w-4 text-accent" />
+            <p className="text-sm font-semibold text-accent">Sub0-powered talent intelligence</p>
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-text-primary sm:text-5xl mb-4">
-            Transform Your Hiring Process
+            From messy applicant data to queryable hiring decisions
           </h1>
           <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">
-            We're revolutionizing talent acquisition by combining artificial intelligence with human insight to help you build exceptional teams faster and smarter.
+            Talvo is built for the Zero to Query hackathon. Sub0 stores structured talent data,
+            Gemini powers explainable screening, and recruiters query candidates in natural language.
           </p>
         </section>
 

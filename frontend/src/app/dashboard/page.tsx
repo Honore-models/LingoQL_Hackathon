@@ -194,7 +194,7 @@ export default function DashboardPage() {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
         <PageHeader
           title="Dashboard"
-          subtitle="Welcome back â€” hereâ€™s what needs attention in your hiring workflow."
+          subtitle="Sub0-powered talent intelligence — here's what needs attention in your hiring workflow."
         />
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -226,7 +226,7 @@ export default function DashboardPage() {
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
       <PageHeader
         title="Dashboard"
-        subtitle="Welcome back â€” hereâ€™s what needs attention in your hiring workflow."
+        subtitle="Sub0-powered talent intelligence — here's what needs attention in your hiring workflow."
       />
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">

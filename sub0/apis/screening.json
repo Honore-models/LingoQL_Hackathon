@@ -1,0 +1,60 @@
+{
+  "title": "Talvo Screening APIs (Sub0 + Express worker)",
+  "description": "Screening runs are created in Sub0. Gemini scoring runs on Express AI worker, which writes screening_results back to Sub0.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/screening-runs",
+      "summary": "Start AI screening for a job",
+      "auth": "required",
+      "requestBody": {
+        "job_id": "string (uuid)",
+        "applicant_ids": "string[] (optional)",
+        "topK": "number (1-50, default 10)"
+      },
+      "response": {
+        "runId": "string",
+        "jobTitle": "string",
+        "verdict": "string",
+        "results": [
+          {
+            "applicant_id": "string",
+            "applicant_name": "string",
+            "match_score": "number",
+            "strengths": "string[]",
+            "gaps": "string[]",
+            "recommendation": "string"
+          }
+        ]
+      },
+      "flow": [
+        "1. Sub0 creates screening_runs row (status: queued)",
+        "2. Sub0 invokes Express AI worker with run id",
+        "3. Worker reads job + applicants from Sub0",
+        "4. Worker calls Gemini for explainable ranking",
+        "5. Worker writes screening_results to Sub0",
+        "6. Sub0 updates run status to completed"
+      ],
+      "expressFallback": "POST /ai/run"
+    },
+    {
+      "method": "GET",
+      "path": "/screening-runs/:runId",
+      "summary": "Retrieve screening run and ranked results",
+      "auth": "required",
+      "response": {
+        "run": "screening_runs object",
+        "results": "screening_results[]"
+      },
+      "expressFallback": "GET /ai/runs/:runId"
+    },
+    {
+      "method": "GET",
+      "path": "/screening-runs",
+      "summary": "List screening runs (optional job filter)",
+      "auth": "required",
+      "query": { "job_id": "string (optional)" },
+      "expressFallback": "GET /ai/runs"
+    }
+  ]
+}

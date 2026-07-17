@@ -114,7 +114,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="mt-6 text-sm text-text-muted">
-                Built for a live demo path: job brief, candidate intake, AI screening, and shortlist review.
+                Sub0 stores your talent data. Gemini scores candidates. You query, review, and shortlist — end to end.
               </p>
             </div>
 

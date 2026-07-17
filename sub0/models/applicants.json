@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "applicants",
+  "description": "Normalized candidate profile for screening and talent queries.",
+  "type": "object",
+  "required": [
+    "first_name",
+    "last_name",
+    "email",
+    "bio",
+    "location",
+    "skills",
+    "experience",
+    "education",
+    "job_title"
+  ],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "first_name": { "type": "string" },
+    "last_name": { "type": "string" },
+    "email": { "type": "string", "format": "email" },
+    "headline": { "type": "string" },
+    "bio": { "type": "string" },
+    "location": { "type": "string", "description": "City, Country" },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "level": { "type": "string" }
+        }
+      }
+    },
+    "language": { "type": "array", "items": { "type": "object" } },
+    "experience": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "years": { "type": "number" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "education": { "type": "array", "items": { "type": "object" } },
+    "certifications": { "type": "array", "items": { "type": "object" } },
+    "projects": { "type": "array", "items": { "type": "object" } },
+    "availability": { "type": "object" },
+    "social_links": { "type": "object" },
+    "job_title": { "type": "string", "description": "Role applied for" },
+    "applicant_state": {
+      "type": "string",
+      "enum": ["Queued", "Screened", "Shortlisted", "Rejected"],
+      "default": "Queued"
+    },
+    "source": { "type": "string", "enum": ["spreadsheet", "resume_zip", "manual", "api"] },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true },
+    "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [
+      { "fields": ["email"], "unique": true },
+      { "fields": ["job_title"] },
+      { "fields": ["applicant_state"] }
+    ],
+    "expressMapping": "backend/src/models/Applicant.ts",
+    "expressRoute": "POST /register-candidate"
+  }
+}

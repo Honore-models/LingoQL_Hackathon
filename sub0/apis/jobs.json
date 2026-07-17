@@ -1,0 +1,43 @@
+{
+  "title": "Talvo Jobs APIs (Sub0)",
+  "description": "Job posting CRUD. Core data lives in Sub0 jobs model.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "summary": "List jobs for recruiter",
+      "auth": "required",
+      "response": { "jobs": "jobs[]" },
+      "expressFallback": "GET /jobs"
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/:id",
+      "summary": "Get single job",
+      "auth": "required",
+      "response": { "job": "jobs object" },
+      "expressFallback": "GET /jobs/:id"
+    },
+    {
+      "method": "POST",
+      "path": "/jobs",
+      "summary": "Create job with AI criteria",
+      "auth": "required",
+      "requestBody": {
+        "job_title": "string",
+        "job_department": "string",
+        "job_location": "string",
+        "job_employment_type": "string",
+        "job_experience_required": "string",
+        "job_description": "string",
+        "job_responsibilities": "string",
+        "job_qualifications": "string",
+        "job_shortlist_size": "10 | 20",
+        "job_ai_criteria": [{ "criteria_string": "string", "description": "string", "priority": "string" }],
+        "workers_required": "number"
+      },
+      "response": { "success": "string", "job": "jobs object" },
+      "expressFallback": "POST /complete-job"
+    }
+  ]
+}

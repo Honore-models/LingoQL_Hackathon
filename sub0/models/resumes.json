@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "resumes",
+  "description": "Resume file metadata and parse pipeline state.",
+  "type": "object",
+  "required": ["applicant_id", "job_title", "resume_pdf_url"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "applicant_id": { "type": "string", "format": "uuid" },
+    "job_title": { "type": "string" },
+    "resume_pdf_url": { "type": "string", "format": "uri" },
+    "parse_status": {
+      "type": "string",
+      "enum": ["pending", "parsed", "failed"],
+      "default": "pending"
+    },
+    "extracted_text_hash": { "type": "string", "description": "SHA-256 of extracted plain text" },
+    "storage_provider": { "type": "string", "enum": ["cloudinary", "sub0_blob", "local"], "default": "cloudinary" },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true },
+    "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [{ "fields": ["applicant_id"] }],
+    "expressMapping": "backend/src/models/Resume.ts"
+  }
+}

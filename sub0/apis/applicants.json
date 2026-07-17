@@ -1,0 +1,41 @@
+{
+  "title": "Talvo Applicants APIs (Sub0)",
+  "description": "Candidate intake from spreadsheets, JSON payloads, or resume ZIP uploads.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/applicants",
+      "summary": "List normalized applicants",
+      "auth": "required",
+      "response": { "candidates": "applicants[]" },
+      "expressFallback": "GET /candidates"
+    },
+    {
+      "method": "GET",
+      "path": "/applicants/:id",
+      "summary": "Get applicant profile",
+      "auth": "required",
+      "response": { "candidate": "applicants object" },
+      "expressFallback": "GET /candidates/:id"
+    },
+    {
+      "method": "POST",
+      "path": "/applicants/import",
+      "summary": "Import applicants (spreadsheet, JSON, or resume ZIP)",
+      "auth": "required",
+      "contentTypes": ["multipart/form-data", "application/json"],
+      "requestBody": {
+        "applicants_spreadsheet": "file (xlsx/csv)",
+        "resume_pdf_zip": "file (zip of PDFs)",
+        "raw_application_data": "JSON string of applicant rows"
+      },
+      "response": {
+        "success": "string",
+        "createdCount": "number",
+        "skippedCount": "number",
+        "applicants": "applicants[]"
+      },
+      "expressFallback": "POST /register-candidate"
+    }
+  ]
+}

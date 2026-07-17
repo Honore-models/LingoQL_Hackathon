@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "jobs",
+  "description": "Job posting with AI screening criteria. Maps from Express Job model.",
+  "type": "object",
+  "required": [
+    "job_title",
+    "job_department",
+    "job_location",
+    "job_employment_type",
+    "job_experience",
+    "job_qualifications",
+    "workers_required"
+  ],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "owner_user_id": { "type": "string", "format": "uuid" },
+    "company_name": { "type": "string" },
+    "job_title": { "type": "string" },
+    "job_department": { "type": "string" },
+    "job_location": { "type": "string" },
+    "job_employment_type": { "type": "string", "enum": ["full-time", "part-time", "contract", "internship", "other"] },
+    "job_requirements": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "job_skills": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "job_experience": { "type": "number", "minimum": 0, "description": "Minimum years of experience" },
+    "job_qualifications": { "type": "array", "items": { "type": "string" } },
+    "workers_required": { "type": "number", "minimum": 1 },
+    "job_notes": { "type": "array", "items": { "type": "string" } },
+    "shortlist_size": { "type": "integer", "enum": [10, 20], "default": 10 },
+    "selected_applicant_deadline": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true },
+    "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [
+      { "fields": ["owner_user_id", "created_at"] },
+      { "fields": ["job_title"] }
+    ],
+    "expressMapping": "backend/src/models/Job.ts",
+    "expressRoute": "POST /complete-job"
+  }
+}

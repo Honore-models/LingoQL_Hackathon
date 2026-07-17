@@ -1,0 +1,39 @@
+{
+  "title": "Talvo Talent Query API (Sub0 + Gemini)",
+  "description": "Natural-language talent intelligence — the hackathon 'Zero to Query' feature. Sub0 stores structured applicant data; Gemini answers recruiter questions with context.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/talent-query",
+      "summary": "Ask a natural-language question over job/applicant data",
+      "auth": "required",
+      "requestBody": {
+        "question": "string (1-4000 chars)",
+        "job_id": "string (optional uuid)",
+        "applicant_ids": "string[] (optional)",
+        "max_applicants": "number (1-200, default 50)"
+      },
+      "response": {
+        "answer": "string",
+        "suggestedNextQuestions": "string[]",
+        "context": {
+          "jobId": "string | null",
+          "applicantCount": "number"
+        }
+      },
+      "exampleQuestions": [
+        "Show backend candidates with PostgreSQL and 3+ years.",
+        "Which candidates have the strongest React experience?",
+        "Find shortlisted candidates with weak education match."
+      ],
+      "flow": [
+        "1. Frontend sends question to Sub0 /talent-query",
+        "2. Sub0 loads structured applicants + job criteria",
+        "3. Express Gemini worker generates answer with citations",
+        "4. Sub0 logs audit_events.talent_query.asked",
+        "5. Frontend displays answer + suggested follow-ups"
+      ],
+      "expressFallback": "POST /ai/ask"
+    }
+  ]
+}

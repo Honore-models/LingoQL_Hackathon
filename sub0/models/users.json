@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "users",
+  "description": "Recruiter account for Talvo. Maps from Express User model.",
+  "type": "object",
+  "required": ["user_name", "user_email", "company_name", "is_verified"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "user_name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "user_email": { "type": "string", "format": "email" },
+    "company_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "is_verified": { "type": "boolean", "default": false },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true },
+    "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [{ "fields": ["user_email"], "unique": true }],
+    "sensitiveFields": ["user_pass_hash", "refresh_token", "sign_otp_token", "pass_token"],
+    "expressMapping": "backend/src/models/User.ts"
+  }
+}

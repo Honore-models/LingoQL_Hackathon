@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "screening_runs",
+  "description": "AI screening orchestration record. Created in Sub0; completed by Express Gemini worker.",
+  "type": "object",
+  "required": ["job_id", "applicant_ids", "top_k", "status"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "job_id": { "type": "string", "format": "uuid" },
+    "applicant_ids": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "top_k": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 },
+    "status": {
+      "type": "string",
+      "enum": ["queued", "running", "completed", "failed"],
+      "default": "queued"
+    },
+    "model": { "type": "string", "example": "gemini-1.5-flash" },
+    "worker_id": { "type": "string", "description": "Express AI worker instance" },
+    "error": { "type": "string" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true },
+    "updated_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [{ "fields": ["job_id", "created_at"] }],
+    "expressMapping": "backend/src/models/ScreeningRun.ts",
+    "expressRoute": "POST /ai/run"
+  }
+}

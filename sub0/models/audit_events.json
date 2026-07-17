@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "audit_events",
+  "description": "Immutable audit trail for recruiter actions and AI runs.",
+  "type": "object",
+  "required": ["user_id", "action", "entity_type", "entity_id"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "user_id": { "type": "string", "format": "uuid" },
+    "action": {
+      "type": "string",
+      "enum": [
+        "user.signup",
+        "user.login",
+        "job.created",
+        "applicant.imported",
+        "screening.started",
+        "screening.completed",
+        "talent_query.asked",
+        "shortlist.emailed"
+      ]
+    },
+    "entity_type": {
+      "type": "string",
+      "enum": ["user", "job", "applicant", "screening_run", "screening_result", "talent_query"]
+    },
+    "entity_id": { "type": "string" },
+    "metadata": { "type": "object", "additionalProperties": true },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [
+      { "fields": ["user_id", "created_at"] },
+      { "fields": ["entity_type", "entity_id"] }
+    ]
+  }
+}

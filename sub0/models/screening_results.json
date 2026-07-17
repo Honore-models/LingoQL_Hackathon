@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "screening_results",
+  "description": "Explainable AI shortlist row written by Gemini worker after a screening run.",
+  "type": "object",
+  "required": [
+    "screening_run_id",
+    "job_id",
+    "applicant_id",
+    "rank",
+    "match_score",
+    "recommendation"
+  ],
+  "properties": {
+    "id": { "type": "string", "format": "uuid", "readOnly": true },
+    "screening_run_id": { "type": "string", "format": "uuid" },
+    "job_id": { "type": "string", "format": "uuid" },
+    "applicant_id": { "type": "string", "format": "uuid" },
+    "rank": { "type": "integer", "minimum": 1 },
+    "match_score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "strengths": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "gaps": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "recommendation": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time", "readOnly": true }
+  },
+  "additionalProperties": false,
+  "x-sub0": {
+    "indexes": [
+      { "fields": ["screening_run_id", "rank"], "unique": true },
+      { "fields": ["job_id", "match_score"] }
+    ],
+    "expressMapping": "backend/src/models/ScreenResult.ts"
+  }
+}
