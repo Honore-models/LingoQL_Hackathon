@@ -12,10 +12,6 @@ import {
   askSchema,
 } from "../validations/functionValidations.js";
 
-if (!env.GOOGLE_API_KEY || !env.GOOGLE_AI_MODEL) {
-  throw new Error("Could not load environment variables");
-}
-
 const router = Router();
 
 const getModels = async (req: Request, res: Response) => {
@@ -47,11 +43,12 @@ const runModel = async (req: Request, res: Response) => {
       return res.status(404).json({ missing_data_error: "No jobs found" });
     }
 
-    const applicants = await Applicant.find(
+    const applicantFilter = (
       input.applicant_ids?.length
         ? { _id: { $in: input.applicant_ids } }
-        : { jobId: input.job_id },
-    )
+        : { job_title: job.job_title ?? "" }
+    ) as any;
+    const applicants = await Applicant.find(applicantFilter)
       .limit(500)
       .lean();
 
@@ -118,11 +115,16 @@ const runModel = async (req: Request, res: Response) => {
         status: "completed",
       });
       const results = await ScreeningResultModel.find({
-        screeningRunId: run._id,
+        screening_run_id: run._id,
       })
         .sort({ rank: 1 })
         .lean();
-      res.status(201).json({ runId: run._id, results });
+      res.status(201).json({
+        runId: run._id,
+        jobTitle: job.job_title,
+        verdict: `Top ${results.length} candidates ranked by Talvo AI.`,
+        results,
+      });
     } catch (e) {
       await ScreeningRunModel.findByIdAndUpdate(run._id, {
         status: "failed",
@@ -139,7 +141,7 @@ const runModel = async (req: Request, res: Response) => {
 const getRuns = async (req: Request, res: Response) => {
   try {
     const jobId = z.string().optional().parse(req.query.jobId);
-    const q = jobId ? { jobId } : {};
+    const q = jobId ? { job_id: jobId } : {};
     const docs = await ScreeningRunModel.find(q)
       .sort({ createdAt: -1 })
       .limit(200)
@@ -159,7 +161,7 @@ const getRunsResult = async (req: Request, res: Response) => {
     if (!run) {
       return res.status(404).json({ data_error: "Run not found" });
     }
-    const results = await ScreeningResultModel.find({ screeningRunId: runId })
+    const results = await ScreeningResultModel.find({ screening_run_id: runId })
       .sort({ rank: 1 })
       .lean();
     res.json({ run, results });
@@ -183,13 +185,14 @@ const askGem = async (req: Request, res: Response) => {
       return res.status(404).json({ data_error: "Job not found" });
     }
 
-    const applicants = await Applicant.find(
+    const applicantFilter = (
       input.applicant_ids?.length
         ? { _id: { $in: input.applicant_ids } }
         : input.job_id
-          ? { jobId: input.job_id }
-          : {},
-    )
+          ? { job_title: job?.job_title ?? "" }
+          : {}
+    ) as any;
+    const applicants = await Applicant.find(applicantFilter)
       .limit(input.max_applicants)
       .lean();
     const ai = await assistantWithGemini({

@@ -16,7 +16,7 @@ const ScreeningRunSchema = new Schema({
     error: { type: String },
     model: { type: String },
 }, { timestamps: true });
-ScreeningRunSchema.index({ jobId: 1, createdAt: -1 });
+ScreeningRunSchema.index({ job_id: 1, createdAt: -1 });
 const ScreeningRunModel = model("ScreeningRun", ScreeningRunSchema);
 export default ScreeningRunModel;
 //# sourceMappingURL=ScreeningRun.js.map

@@ -17,6 +17,6 @@ const ScreeningResultSchema = new Schema({
     gaps: { type: [String], default: [] },
     recommendation: { type: String, required: true },
 }, { timestamps: true });
-ScreeningResultSchema.index({ screeningRunId: 1, rank: 1 }, { unique: true });
+ScreeningResultSchema.index({ screening_run_id: 1, rank: 1 }, { unique: true });
 export const ScreeningResultModel = model("ScreeningResult", ScreeningResultSchema);
 //# sourceMappingURL=ScreenResult.js.map

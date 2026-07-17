@@ -1,5 +1,5 @@
 import express from "express";
-import dashBoardControl from "../controllers/dashboardControl.js";
+import dashBoardControl, { getCandidate, getJob, listCandidates, listJobs, } from "../controllers/dashboardControl.js";
 import applicantControl from "../controllers/applicantControl.js";
 import askGeminiCont from "../controllers/shortList.js";
 import completeJob from "../controllers/completeJob.js";
@@ -32,6 +32,10 @@ let fields = upload.fields([
 const dashRoutes = () => {
     const router = express.Router();
     router.get("/dashboard", middleAuth, dashBoardControl);
+    router.get("/jobs", middleAuth, listJobs);
+    router.get("/jobs/:id", middleAuth, getJob);
+    router.get("/candidates", middleAuth, listCandidates);
+    router.get("/candidates/:id", middleAuth, getCandidate);
     router.post("/register-candidate", middleAuth, fields, applicantControl);
     router.post("/ask", middleAuth, askGeminiCont);
     router.post("/complete-job", middleAuth, completeJob);

@@ -153,6 +153,15 @@ type ResumeUploadResponse = {
 type ScreeningRunApiResult = {
   applicant_id?: string;
   applicant_name?: string;
+  match_score?: number;
+  strengths?: string[];
+  gaps?: string[];
+  recommendation?: string;
+};
+
+type LegacyScreeningRunApiResult = {
+  applicant_id?: string;
+  applicant_name?: string;
   applicant_marks?: number;
   applicant_specification_relevance?: {
     skills_relevance?: number;
@@ -162,9 +171,16 @@ type ScreeningRunApiResult = {
 };
 
 type ScreeningRunResponse = {
+  runId?: string;
+  jobTitle?: string;
+  verdict?: string;
+  results?: ScreeningRunApiResult[];
+};
+
+type LegacyScreeningRunResponse = {
   success: {
     job_title?: string;
-    applicants_details?: ScreeningRunApiResult[];
+    applicants_details?: LegacyScreeningRunApiResult[];
     result_verdict?: string;
   };
 };
@@ -260,7 +276,7 @@ function buildMockScreeningAnalysis(jobId: string): ScreeningAnalysis {
 }
 
 function normalizeScreeningApplicant(
-  applicant: ScreeningRunApiResult
+  applicant: LegacyScreeningRunApiResult
 ): ScreeningCandidateAnalysis {
   return {
     candidateId: applicant.applicant_id?.trim() || undefined,
@@ -274,6 +290,22 @@ function normalizeScreeningApplicant(
     ),
     reasoning:
       applicant.applicant_result_description?.trim() ||
+      'Screening summary unavailable.',
+  };
+}
+
+function normalizeAiRunApplicant(
+  applicant: ScreeningRunApiResult
+): ScreeningCandidateAnalysis {
+  return {
+    candidateId: applicant.applicant_id?.trim() || undefined,
+    candidateName: applicant.applicant_name?.trim() || 'Candidate',
+    score: clampPercentage(applicant.match_score),
+    skillsMatchPct: clampPercentage(applicant.match_score),
+    educationPct: 0,
+    reasoning:
+      applicant.recommendation?.trim() ||
+      [...(applicant.strengths ?? []), ...(applicant.gaps ?? [])].join(' ') ||
       'Screening summary unavailable.',
   };
 }
@@ -641,7 +673,22 @@ export async function createJob(
 ): Promise<CompleteJobResponse> {
   const response = await api.post<CompleteJobResponse>(
     '/complete-job',
-    payload
+    {
+      reqBody: {
+        ...payload.reqBody,
+        job_requirements: payload.reqBody.job_description,
+        job_skills: payload.reqBody.job_ai_criteria.map(
+          (criterion) => criterion.criteria_string
+        ),
+        job_qualifications: payload.reqBody.job_qualifications,
+        job_notes: [
+          payload.reqBody.job_responsibilities,
+          ...payload.reqBody.job_ai_criteria.map(
+            (criterion) => `${criterion.priority}: ${criterion.description}`
+          ),
+        ],
+      },
+    }
   );
   return response.data;
 }
@@ -660,10 +707,10 @@ export async function uploadCandidatesFile(
   }
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('applicants_spreadsheet', file);
 
   const response = await api.post<RegisterCandidatesResponse>(
-    '/register-candidates',
+    '/register-candidate',
     formData,
     {
       headers: {
@@ -688,9 +735,9 @@ export async function uploadResumeZip(
   }
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('resume_pdf_zip', file);
 
-  const response = await api.post<ResumeUploadResponse>('/resume', formData, {
+  const response = await api.post<ResumeUploadResponse>('/register-candidate', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -713,8 +760,8 @@ export async function registerCandidates(
   }
 
   const response = await api.post<RegisterCandidatesResponse>(
-    '/register-candidates',
-    applicants,
+    '/register-candidate',
+    { raw_application_data: JSON.stringify(applicants) },
     {
       headers: {
         'Content-Type': 'application/json',
@@ -735,17 +782,34 @@ export async function runScreening(
     return analysis;
   }
 
-  const response = await api.post<ScreeningRunResponse>('/ask', { jobTitle });
-  const result = response.data.success;
+  const response = await api.post<ScreeningRunResponse | LegacyScreeningRunResponse>(
+    '/ai/run',
+    { job_id: jobId, topK: 10 }
+  );
+  if ('success' in response.data) {
+    const result = response.data.success;
+    const legacyAnalysis: ScreeningAnalysis = {
+      jobId,
+      jobTitle: result.job_title?.trim() || jobTitle,
+      verdict:
+        result.result_verdict?.trim() || 'Screening completed successfully',
+      generatedAtISO: new Date().toISOString(),
+      applicants: (result.applicants_details ?? []).map(
+        normalizeScreeningApplicant
+      ),
+    };
+
+    storeScreeningAnalysis(legacyAnalysis);
+    return legacyAnalysis;
+  }
+
+  const result = response.data;
   const analysis: ScreeningAnalysis = {
     jobId,
-    jobTitle: result.job_title?.trim() || jobTitle,
-    verdict:
-      result.result_verdict?.trim() || 'Screening completed successfully',
+    jobTitle: result.jobTitle?.trim() || jobTitle,
+    verdict: result.verdict?.trim() || 'Screening completed successfully',
     generatedAtISO: new Date().toISOString(),
-    applicants: (result.applicants_details ?? []).map(
-      normalizeScreeningApplicant
-    ),
+    applicants: (result.results ?? []).map(normalizeAiRunApplicant),
   };
 
   storeScreeningAnalysis(analysis);

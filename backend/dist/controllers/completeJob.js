@@ -6,8 +6,16 @@ import User from "../models/User.js";
 import { JobSchema } from "../validations/functionValidations.js";
 const completeJob = async (req, res) => {
     try {
-        const { reqString } = req.body;
-        const reqBody = JSON.parse(reqString);
+        const reqBody = typeof req.body.reqString === "string"
+            ? JSON.parse(req.body.reqString)
+            : req.body.reqBody ?? req.body;
+        if (!reqBody)
+            return res.status(400).json({ data_error: "Incorrect job structure" });
+        if (reqBody.job_experience === undefined &&
+            typeof reqBody.job_experience_required === "string") {
+            const match = reqBody.job_experience_required.match(/\d+/);
+            reqBody.job_experience = match ? Number(match[0]) : 0;
+        }
         const z_parse_result = JobSchema.parse(reqBody);
         const access_token = req.cookies.access_token;
         if (!access_token) {
@@ -16,8 +24,6 @@ const completeJob = async (req, res) => {
         if (!env.ACCESS_SECRET) {
             throw new Error("Access token environment variable could not be found");
         }
-        if (!reqBody)
-            return res.status(400).json({ data_error: "Incorrect job structure" });
         const oldJob = await Job.findOne({ job_title: reqBody.job_title });
         if (oldJob)
             return res.status(401).json({ message: "Job already registered" });
@@ -34,7 +40,7 @@ const completeJob = async (req, res) => {
         const job = new Job(z_parse_result);
         job.company_name = company_name;
         await job.save();
-        res.status(201).json({ success: "Job successfully created" });
+        res.status(201).json({ success: "Job successfully created", job });
     }
     catch (error) {
         controlDebug("Error in complete job controller");
